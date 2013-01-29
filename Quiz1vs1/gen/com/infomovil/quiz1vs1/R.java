@@ -18,6 +18,8 @@ public final class R {
     }
     public static final class layout {
         public static final int layout_quiz1vs1=0x7f030000;
+        public static final int preguntas_layout=0x7f030001;
+        public static final int principal_layout=0x7f030002;
     }
     public static final class menu {
         public static final int layout_quiz1vs1=0x7f060000;
