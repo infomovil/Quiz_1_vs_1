@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <string name="app_name">Quiz1vs1</string>
+    <string name="app_name">Quiz Master</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="titulo">Quiz Champion</string>
+	<string name="ajustes">Ajustes</string>
+	<string name="partidas_por_cnt">Partidas por responder</string>
+	<string name="partidas_enviadas">Partidas enviadas</string>
+	<string name="logros">Logros</string>
+	<string name="mi_perfil">Mi perfil</string>
+	<string name="paises_default">Elige un país</string>
+ 
+    <string-array name="paises_array">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+    </string-array>
 
 </resources>

@@ -1,20 +1,71 @@
 package com.infomovil.quiz1vs1;
 
+import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
+import com.infomovil.quiz1vs1.modelo.Usuario;
+import android.view.LayoutInflater;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 public class Quiz1vs1Activity extends Activity {
-
+	
+	private ViewFlipper vf;
+	private ListView listaPartidasPendientes;
+	private ListView listaPartidasEnviadas;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_quiz1vs1);
+        setContentView(R.layout.pantalla_inicio);
+        
+        vf = (ViewFlipper) findViewById(R.id.viewFlipper);
+        vf.setFlipInterval(2000);
+        vf.setFadingEdgeLength(200);
+        vf.startFlipping();        
+        final ProgressDialog pd = ProgressDialog.show(this,"","Cargando...",true, false);
+    		new Thread(new Runnable(){
+	    		public void run(){
+		    		try {		    			
+						Thread.sleep(2100);
+						//Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
+						//startActivity(i);
+						//Conectarse al servidor
+						conectarAservidor();
+						vf.stopFlipping();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+		    		pd.dismiss();	    		
+	    		}
+    	}).start();
+		listaPartidasEnviadas = (ListView) findViewById(R.id.listPartidasEnviadas);
+        listaPartidasPendientes = (ListView) findViewById(R.id.listPartidasPendientes);
+        
+        Usuario usuarios[] = new Usuario[] {
+			new Usuario("Maria", R.drawable.avatar1),
+			new Usuario("Alejandro", R.drawable.avatar2)
+        };
+                
+        UsuariosPendientesAdapter adapter = new UsuariosPendientesAdapter(this, R.layout.item, usuarios);
+        View cabecera = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cabecera, null, false);
+        listaPartidasPendientes.addHeaderView(cabecera);
+        listaPartidasPendientes.setAdapter(adapter);
+        
+        listaPartidasEnviadas.addHeaderView(cabecera);
+        listaPartidasEnviadas.setAdapter(adapter);
     }
 
+    public void conectarAservidor(){
+    	
+    }
+    
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.layout_quiz1vs1, menu);
         return true;
     }
