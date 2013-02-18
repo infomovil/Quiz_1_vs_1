@@ -30,7 +30,7 @@ public class Quiz1vs1Activity extends Activity {
     		new Thread(new Runnable(){
 	    		public void run(){
 		    		try {		    			
-						Thread.sleep(2100);
+						Thread.sleep(2500);
 						//Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
 						//startActivity(i);
 						//Conectarse al servidor
@@ -51,11 +51,12 @@ public class Quiz1vs1Activity extends Activity {
         };
                 
         UsuariosPendientesAdapter adapter = new UsuariosPendientesAdapter(this, R.layout.item, usuarios);
-        View cabecera = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cabecera, null, false);
-        listaPartidasPendientes.addHeaderView(cabecera);
+        View cabecera_p = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cabecera_pendientes, null, false);
+        View cabecera_r = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.cabecera_respondidos, null, false);
+        listaPartidasPendientes.addHeaderView(cabecera_p);
         listaPartidasPendientes.setAdapter(adapter);
         
-        listaPartidasEnviadas.addHeaderView(cabecera);
+        listaPartidasEnviadas.addHeaderView(cabecera_r);
         listaPartidasEnviadas.setAdapter(adapter);
     }
 

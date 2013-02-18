@@ -10,7 +10,7 @@
 
         <include layout="@layout/layout_quiz1vs1"/>
 
-        <include layout="@layout/registro1"/>
+        <include layout="@layout/principal_layout"/>
 
     </ViewFlipper>
 
