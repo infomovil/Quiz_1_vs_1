@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="50dp" >
 
             <TextView
@@ -25,7 +25,7 @@
                 android:fontFamily="Arial"
                 android:textColor="#0066FF"
                 android:textSize="30sp"
-                android:text="REGISTRO" />
+                android:text="REGISTRO 1/2" />
 
         </LinearLayout>
 

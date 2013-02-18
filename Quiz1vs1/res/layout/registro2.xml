@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="3"
+        android:orientation="vertical" >
+        
+        <TextView
+                android:id="@+id/textView1"
+                android:layout_width="338dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="Arial"
+                android:textColor="#0066FF"
+                android:textSize="30sp"
+                android:text="REGISTRO 2/2"
+                android:layout_marginTop="10dp" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="134dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.68"
+            android:src="@drawable/avatar1" 
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chico" 
+            android:gravity="center"
+            android:layout_marginLeft="50dp"/>
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chica" 
+            android:gravity="center"
+            android:layout_marginLeft="50dp"/>
+
+        </LinearLayout>
+         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2"
+            android:orientation="vertical" >
+
+             <ScrollView
+                 android:id="@+id/scrollView1"
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:layout_margin="30dp" 
+                  android:layout_weight="1">
+
+                 <LinearLayout
+                     android:layout_width="fill_parent"
+                     android:layout_height="fill_parent" >
+
+                     <ImageView
+                         android:id="@+id/imageView2"
+                         android:layout_width="75dp"
+                         android:layout_height="75dp"
+                         android:src="@drawable/avatar2" />
+
+                     <ImageView
+                         android:id="@+id/imageView3"
+                         android:layout_width="75dp"
+                         android:layout_height="75dp"
+                         android:src="@drawable/avatar1" />
+
+                     <ImageView
+                         android:id="@+id/imageView4"
+                         android:layout_width="75dp"
+                         android:layout_height="75dp"
+                         android:src="@drawable/avatar2" />
+
+                 </LinearLayout>
+             </ScrollView>
+
+             <Button
+                 android:id="@+id/button1"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="top|center"
+                 android:text="Guardar perfil" />
+
+        </LinearLayout>
+
+</LinearLayout>
