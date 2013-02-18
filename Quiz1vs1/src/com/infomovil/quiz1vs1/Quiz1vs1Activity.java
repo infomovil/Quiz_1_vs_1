@@ -24,7 +24,10 @@ public class Quiz1vs1Activity extends Activity {
 	private Button botonAtrasAjustes;
 	private Button botonAtrasPerfil;
 	private Button botonPerfil;
+	private Button botonGuardarPerfil;
+	private Button botonGuardarAjustes;
 	private ImageButton botonAjustes;
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,9 @@ public class Quiz1vs1Activity extends Activity {
         botonAtrasPerfil = (Button) findViewById(R.id.botonAtrasPerfil);
         botonPerfil = (Button) findViewById(R.id.botonPerfil);
         botonAjustes = (ImageButton) findViewById(R.id.ajustes);
+        botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
+        botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
+        
         
         botonAjustes.setOnClickListener(new OnClickListener() {
 			
@@ -89,6 +95,23 @@ public class Quiz1vs1Activity extends Activity {
 			@Override
 			public void onClick(View v) {
 				vf.setDisplayedChild(5);				
+			}
+		});
+		
+		
+		botonGuardarPerfil.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//vf.setDisplayedChild(5);				
+			}
+		});
+		
+		botonGuardarAjustes.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//vf.setDisplayedChild(5);				
 			}
 		});
 		
