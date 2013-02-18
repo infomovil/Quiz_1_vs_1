@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@drawable/fondo"
+    android:padding="20dp"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -19,9 +20,9 @@
 
             <TextView
                 android:id="@+id/textView1"
-                android:layout_width="338dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_gravity="center"
                 android:fontFamily="Arial"
                 android:textColor="#0066FF"
                 android:textSize="30sp"
@@ -29,7 +30,7 @@
 
             <Button
                android:layout_gravity="bottom|right"
-               android:id="@+id/button2"
+               android:id="@+id/botonPerfil"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:gravity="center"
@@ -89,7 +90,7 @@
                 
                 <Button
                     android:layout_gravity="bottom|right"
-                    android:id="@+id/button1"
+                    android:id="@+id/botonAtrasAjustes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Atras" />

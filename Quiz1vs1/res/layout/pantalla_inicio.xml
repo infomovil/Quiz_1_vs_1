@@ -9,8 +9,11 @@
         android:layout_width="fill_parent" >
 
         <include layout="@layout/layout_quiz1vs1"/>
-
+		<include layout="@layout/registro1"/>
+		<include layout="@layout/registro2"/>
         <include layout="@layout/principal_layout"/>
+        <include layout="@layout/ajustes"/>
+        <include layout="@layout/perfil"/>
 
     </ViewFlipper>
 
