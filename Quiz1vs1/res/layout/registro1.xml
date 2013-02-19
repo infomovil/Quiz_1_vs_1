@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="#2225EB"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="15dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:fontFamily="Arial"
-                android:textColor="#0066FF"
+                android:textColor="#FFFFFF"
                 android:textSize="30sp"
                 android:text="REGISTRO 1/2" />
 
@@ -80,7 +81,6 @@
                     android:layout_height="50dp"
                     android:gravity="center"
                     android:text="Ciudad" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -132,7 +132,7 @@
 
                 <Button
                     android:layout_gravity="bottom|right"
-                    android:id="@+id/button1"
+                    android:id="@+id/botonSiguiente"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Siguiente" />

@@ -2,24 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#2225EB"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="3"
-        android:orientation="vertical" >
-        
+        android:orientation="vertical"
+        android:padding="15dp" >
+
         <TextView
-                android:id="@+id/textView1"
-                android:layout_width="338dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:fontFamily="Arial"
-                android:textColor="#0066FF"
-                android:textSize="30sp"
-                android:text="REGISTRO 2/2"
-                android:layout_marginTop="10dp" />
+            android:id="@+id/textView1"
+            android:layout_width="338dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="Arial"
+            android:gravity="center"
+            android:text="REGISTRO 2/2"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp" />
 
         <ImageView
             android:id="@+id/imageView1"
@@ -37,21 +39,29 @@
             android:layout_weight="4"
             android:orientation="horizontal" >
 
-        <RadioButton
-            android:id="@+id/radioButton1"
+        <RadioGroup
+            android:id="@+id/radioGroup1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chico" 
-            android:gravity="center"
-            android:layout_marginLeft="50dp"/>
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chica" 
-            android:gravity="center"
-            android:layout_marginLeft="50dp"/>
+            <RadioButton
+	            android:id="@+id/radioButton1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Chico"
+				android:textSize="20sp"
+	            android:gravity="center"
+	            android:layout_marginLeft="50dp"/>
+
+	        <RadioButton
+	            android:id="@+id/radioButton2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Chica" 
+	            android:gravity="center"
+	            android:layout_marginLeft="50dp"/>
+        </RadioGroup>
 
         </LinearLayout>
          <LinearLayout
@@ -69,7 +79,7 @@
 
                  <LinearLayout
                      android:layout_width="fill_parent"
-                     android:layout_height="fill_parent" >
+                     android:layout_height="wrap_content" >
 
                      <ImageView
                          android:id="@+id/imageView2"
@@ -93,7 +103,7 @@
              </ScrollView>
 
              <Button
-                 android:id="@+id/button1"
+                 android:id="@+id/botonGuardar"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_gravity="top|center"

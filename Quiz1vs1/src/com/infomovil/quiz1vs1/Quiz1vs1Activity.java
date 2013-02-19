@@ -8,6 +8,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
@@ -16,6 +19,14 @@ public class Quiz1vs1Activity extends Activity {
 	private ViewFlipper vf;
 	private ListView listaPartidasPendientes;
 	private ListView listaPartidasEnviadas;
+	private Button botonSiguiente;
+	private Button botonGuardar;
+	private Button botonAtrasAjustes;
+	private Button botonAtrasPerfil;
+	private Button botonPerfil;
+	private Button botonGuardarPerfil;
+	private Button botonGuardarAjustes;
+	private ImageButton botonAjustes;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +55,79 @@ public class Quiz1vs1Activity extends Activity {
     	}).start();
 		listaPartidasEnviadas = (ListView) findViewById(R.id.listPartidasEnviadas);
         listaPartidasPendientes = (ListView) findViewById(R.id.listPartidasPendientes);
+        botonSiguiente = (Button) findViewById(R.id.botonSiguiente);
+        botonGuardar = (Button) findViewById(R.id.botonGuardar);
+        botonAtrasAjustes = (Button) findViewById(R.id.botonAtrasAjustes);
+        botonAtrasPerfil = (Button) findViewById(R.id.botonAtrasPerfil);
+        botonPerfil = (Button) findViewById(R.id.botonPerfil);
+        botonAjustes = (ImageButton) findViewById(R.id.ajustes);
+        botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
+        botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
+          
+        
+        botonAjustes.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				vf.setDisplayedChild(4);			
+			}
+		});
+        
+        botonGuardarPerfil.setOnClickListener(new OnClickListener() {
+        			
+        	@Override
+        	public void onClick(View v) {
+        		//vf.setDisplayedChild(5);				
+        	}
+        });
+        		
+        botonGuardarAjustes.setOnClickListener(new OnClickListener() {
+        	
+        	@Override
+        	public void onClick(View v) {
+        		//vf.setDisplayedChild(5);				
+        	}
+        });        
+        
+		botonAtrasAjustes.setOnClickListener(new OnClickListener() {
+					
+			@Override
+			public void onClick(View v) {
+				vf.setDisplayedChild(3);			
+			}
+		});
+
+		botonAtrasPerfil.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				vf.setDisplayedChild(4);			
+			}
+		});
+        
+		botonPerfil.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				vf.setDisplayedChild(5);				
+			}
+		});
+		
+        botonSiguiente.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				vf.showNext();				
+			}
+		});
+        
+        botonGuardar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				vf.showNext();				
+			}
+		});
         
         Usuario usuarios[] = new Usuario[] {
 			new Usuario("Maria", R.drawable.avatar1),
