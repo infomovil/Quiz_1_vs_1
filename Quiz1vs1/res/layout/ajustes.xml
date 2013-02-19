@@ -26,7 +26,7 @@
                 android:fontFamily="Arial"
                 android:textColor="#0066FF"
                 android:textSize="30sp"
-                android:text="AJUSTES" />
+                android:text="@string/ajustes" />
 
             <Button
                android:layout_gravity="bottom|right"
@@ -54,21 +54,21 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Sonido" />
+                    android:text="@string/sonido" />
 
                 <TextView
                     android:id="@+id/textView3"
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Notificaciones" />             
+                    android:text="@string/notificaciones" />             
 
                 <Button
                     android:layout_gravity="bottom|right"
                     android:id="@+id/botonAtrasAjustes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Atras" />
+                    android:text="@string/atras" />
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +98,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_gravity="top|center"
-                 android:text="Guardar ajustes" />                
+                 android:text="@string/guardar" />                
                 
             </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.infomovil.quiz1vs1;
 
+import com.infomovil.quiz1vs1.aplicacion.adapters.ImageAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
 import com.infomovil.quiz1vs1.modelo.Usuario;
 import android.view.LayoutInflater;
@@ -9,9 +10,13 @@ import android.app.ProgressDialog;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class Quiz1vs1Activity extends Activity {
@@ -63,6 +68,16 @@ public class Quiz1vs1Activity extends Activity {
         botonAjustes = (ImageButton) findViewById(R.id.ajustes);
         botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
         botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
+        
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageAdapter(this));
+
+        gridview.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
           
         
         botonAjustes.setOnClickListener(new OnClickListener() {

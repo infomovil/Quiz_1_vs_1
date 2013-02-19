@@ -19,7 +19,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="Arial"
             android:gravity="center"
-            android:text="REGISTRO 2/2"
+            android:text="@string/registro2"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 
@@ -27,88 +27,66 @@
             android:id="@+id/imageView1"
             android:layout_width="134dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="0.68"
-            android:src="@drawable/avatar1" 
-            android:layout_gravity="center"/>
-
+            android:src="@drawable/avatar1" />
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="4"
-            android:orientation="horizontal" >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="4"
+        android:orientation="horizontal" >
 
         <RadioGroup
             android:id="@+id/radioGroup1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <RadioButton
-	            android:id="@+id/radioButton1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Chico"
-				android:textSize="20sp"
-	            android:gravity="center"
-	            android:layout_marginLeft="50dp"/>
+                android:id="@+id/radioButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:gravity="center"
+                android:text="@string/chico"
+                android:textSize="20sp" />
 
-	        <RadioButton
-	            android:id="@+id/radioButton2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="Chica" 
-	            android:gravity="center"
-	            android:layout_marginLeft="50dp"/>
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:gravity="center"
+                android:text="@string/chica" />
         </RadioGroup>
+    </LinearLayout>
 
-        </LinearLayout>
-         <LinearLayout
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" >
+
+        <GridView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/gridview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="2"
-            android:orientation="vertical" >
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="10dp" />
 
-             <ScrollView
-                 android:id="@+id/scrollView1"
-                 android:layout_width="fill_parent"
-                 android:layout_height="fill_parent"
-                 android:layout_margin="30dp" 
-                  android:layout_weight="1">
-
-                 <LinearLayout
-                     android:layout_width="fill_parent"
-                     android:layout_height="wrap_content" >
-
-                     <ImageView
-                         android:id="@+id/imageView2"
-                         android:layout_width="75dp"
-                         android:layout_height="75dp"
-                         android:src="@drawable/avatar2" />
-
-                     <ImageView
-                         android:id="@+id/imageView3"
-                         android:layout_width="75dp"
-                         android:layout_height="75dp"
-                         android:src="@drawable/avatar1" />
-
-                     <ImageView
-                         android:id="@+id/imageView4"
-                         android:layout_width="75dp"
-                         android:layout_height="75dp"
-                         android:src="@drawable/avatar2" />
-
-                 </LinearLayout>
-             </ScrollView>
-
-             <Button
-                 android:id="@+id/botonGuardar"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="top|center"
-                 android:text="Guardar perfil" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/botonGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:text="@string/guardar" />
+    </LinearLayout>
 
 </LinearLayout>

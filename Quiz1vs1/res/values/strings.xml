@@ -22,5 +22,21 @@
         <item>New Zealand</item>
         <item>India</item>
     </string-array>
+    <string name="registro1">REGISTRO (1/2)</string>
+    <string name="registro2">REGISTRO (2/2)</string>
+    <string name="nombre">Nombre</string>
+    <string name="email">Email</string>
+    <string name="apellido">Apellido</string>
+    <string name="nick">Nick</string>
+    <string name="pais">País</string>
+    <string name="ciudad">Ciudad</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="guardar">Guardar</string>
+    <string name="chico">Chico</string>
+    <string name="chica">Chica</string>
+    <string name="atras">Atrás</string>
+    <string name="avatar">Avatar</string>
+    <string name="sonido">Sonido</string>
+    <string name="notificaciones">Notificaciones</string>
 
 </resources>

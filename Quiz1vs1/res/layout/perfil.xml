@@ -44,49 +44,49 @@
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Nombre" />
+                    android:text="@string/nombre" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Apellido" />
+                    android:text="@string/apellido" />
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Nick" />
+                    android:text="@string/nick" />
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="País" />
+                    android:text="@string/pais" />
 
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Ciudad" />
+                    android:text="@string/ciudad" />
 
                 <TextView
                     android:id="@+id/textView3"
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="Avatar" />
+                    android:text="@string/avatar" />
                 
                 <Button
                     android:layout_gravity="bottom|right"
                     android:id="@+id/botonAtrasPerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Atras" />                
+                    android:text="@string/atras" />                
             </LinearLayout>
 
             <LinearLayout
@@ -142,7 +142,7 @@
 	                 android:layout_width="wrap_content"
 	                 android:layout_height="wrap_content"
 	                 android:layout_gravity="top|center"
-	                 android:text="Guardar perfil" />
+	                 android:text="@string/guardar" />
                 
             </LinearLayout>
 
