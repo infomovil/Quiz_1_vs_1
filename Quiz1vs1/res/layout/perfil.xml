@@ -80,14 +80,6 @@
                     android:layout_height="50dp"
                     android:gravity="center"
                     android:text="Avatar" />
-                
-                <Button
-                    android:layout_gravity="bottom|right"
-                    android:id="@+id/botonAtrasPerfil"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Atras" />
-                
             </LinearLayout>
 
             <LinearLayout
@@ -137,13 +129,14 @@
 		            android:layout_gravity="left"
 		            android:src="@drawable/avatar2" />
                 
-                                
+                
                 <Button
-	                 android:id="@+id/botonGuardarPerfil"
-	                 android:layout_width="wrap_content"
-	                 android:layout_height="wrap_content"
-	                 android:layout_gravity="top|center"
-	                 android:text="Guardar perfil" />
+                    android:layout_gravity="bottom|right"
+                    android:id="@+id/botonAtrasPerfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Atrás" />                
+                
             </LinearLayout>
 
         </LinearLayout>
