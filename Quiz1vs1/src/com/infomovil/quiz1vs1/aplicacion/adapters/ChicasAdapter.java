@@ -9,10 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-public class ImageAdapter extends BaseAdapter {
+public class ChicasAdapter extends BaseAdapter {
     private Context mContext;
 
-    public ImageAdapter(Context c) {
+    public ChicasAdapter(Context c) {
         mContext = c;
     }
 
@@ -21,11 +21,11 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return null;
+        return mContext.getResources().getDrawable(mThumbIds[position]);
     }
 
     public long getItemId(int position) {
-        return 0;
+        return mThumbIds[position];
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -39,8 +39,8 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-
-        imageView.setImageResource(mThumbIds[position]);
+        imageView.setBackgroundResource(mThumbIds[position]);
+        //imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
 

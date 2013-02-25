@@ -15,23 +15,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp" >
+            android:layout_marginBottom="20dp" >
 
             <TextView
                 android:id="@+id/textView1"
-                android:layout_width="338dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:fontFamily="Arial"
+                android:gravity="center"
+                android:text="PERFIL"
                 android:textColor="#0066FF"
-                android:textSize="30sp"
-                android:text="PERFIL" />
+                android:textSize="30sp" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -44,6 +44,7 @@
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/nombre" />
 
                 <TextView
@@ -51,6 +52,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/apellido" />
 
                 <TextView
@@ -58,6 +60,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/nick" />
 
                 <TextView
@@ -65,6 +68,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/pais" />
 
                 <TextView
@@ -72,6 +76,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/ciudad" />
 
                 <TextView
@@ -79,14 +84,8 @@
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="@string/avatar" />
-                
-                <Button
-                    android:layout_gravity="bottom|right"
-                    android:id="@+id/botonAtrasPerfil"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/atras" />                
+                    android:textColor="#000000"
+                    android:text="@string/avatar" />                                               
             </LinearLayout>
 
             <LinearLayout
@@ -96,25 +95,25 @@
                 android:orientation="vertical" >
 
                 <EditText
-                    android:id="@+id/editTextNombre"
+                    android:id="@+id/editTextNombrePerfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/editTextApellido"
+                    android:id="@+id/editTextApellidoPerfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/editTextNick"
+                    android:id="@+id/editTextNickPerfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
 
                 <Spinner
-                    android:id="@+id/spinnerPaises"
+                    android:id="@+id/spinnerPaisesPerfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/paises_array"
@@ -122,32 +121,42 @@
                      />
 
                 <EditText
-                    android:id="@+id/editTextCiudad"
+                    android:id="@+id/editTextCiudadPerfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
 
                 <ImageView
-		            android:background="@android:color/transparent"
+		            android:background="@drawable/avatar2"
 		            android:contentDescription="@string/ajustes"
 		            android:id="@+id/ajustes"
 		            android:layout_width="64dp"
 		            android:layout_height="64dp"
-		            android:layout_gravity="left"
-		            android:src="@drawable/avatar2" />
-                
-                        
-                <Button
-                     android:id="@+id/botonGuardarPerfil"
-	                 android:layout_width="wrap_content"
-	                 android:layout_height="wrap_content"
-	                 android:layout_gravity="top|center"
-	                 android:text="@string/guardar" />
+		            android:layout_gravity="left"/>
                 
             </LinearLayout>
 
         </LinearLayout>
         
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <Button
+                android:id="@+id/botonAtrasPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="125dp"
+                android:layout_marginLeft="25dp"
+                android:text="@string/atras" />
+            
+            <Button
+                android:id="@+id/botonGuardarPerfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/guardar" />
+            
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

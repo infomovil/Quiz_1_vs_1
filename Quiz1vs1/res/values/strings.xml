@@ -38,5 +38,6 @@
     <string name="avatar">Avatar</string>
     <string name="sonido">Sonido</string>
     <string name="notificaciones">Notificaciones</string>
+    <string name="elegirAvatar">Elija un avatar</string>
 
 </resources>

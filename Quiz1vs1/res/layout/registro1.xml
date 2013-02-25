@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2225EB"
+    android:background="@layout/fondo_degradado"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -20,7 +20,7 @@
 
             <TextView
                 android:id="@+id/textView1"
-                android:layout_width="338dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:fontFamily="Arial"
@@ -31,62 +31,69 @@
         </LinearLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:orientation="vertical" >
+                android:layout_weight="3"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/email" />
 
                 <TextView
                     android:id="@+id/textView3"
-					android:layout_width="150dp"
+					android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/nombre" />
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/apellido" />
 
                 <TextView
                     android:id="@+id/textView5"
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/nick" />
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/pais" />
 
                 <TextView
                     android:id="@+id/textView7"
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/ciudad" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="vertical" >
 
                 <EditText
@@ -94,7 +101,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress" >
-
                     <requestFocus />
                 </EditText>
 

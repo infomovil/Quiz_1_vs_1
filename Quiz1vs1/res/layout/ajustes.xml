@@ -6,23 +6,18 @@
     android:padding="20dp"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="Arial"
                 android:textColor="#0066FF"
                 android:textSize="30sp"
@@ -32,7 +27,7 @@
                android:layout_gravity="bottom|right"
                android:id="@+id/botonPerfil"
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
+               android:layout_height="50dp"
                android:gravity="center"
                android:text="@string/mi_perfil" />
        
@@ -41,7 +36,8 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -54,6 +50,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/sonido" />
 
                 <TextView
@@ -61,14 +58,9 @@
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
+                    android:textColor="#000000"
                     android:text="@string/notificaciones" />             
 
-                <Button
-                    android:layout_gravity="bottom|right"
-                    android:id="@+id/botonAtrasAjustes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/atras" />
             </LinearLayout>
 
             <LinearLayout
@@ -81,7 +73,6 @@
                     android:id="@+id/toggleButtonSonido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ToggleButton" 
                  />
 
                 <requestFocus />
@@ -90,20 +81,29 @@
                     android:id="@+id/toggleButtonNotificaciones"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ToggleButton" 
                  />
- 
-             <Button
-                 android:id="@+id/botonGuardarAjustes"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_gravity="top|center"
-                 android:text="@string/guardar" />                
-                
+
             </LinearLayout>
 
         </LinearLayout>
-        
-    </LinearLayout>
+        <LinearLayout 
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                
+            <Button
+                    android:id="@+id/botonAtrasAjustes"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:text="@string/atras" />
+            <Button
+	              	android:id="@+id/botonGuardarAjustes"
+	              	android:layout_width="100dp"
+	              	android:layout_height="50dp"
+                   	android:layout_marginLeft="80dp"
+	              	android:text="@string/guardar" />
+            
+        </LinearLayout>
 
 </LinearLayout>
