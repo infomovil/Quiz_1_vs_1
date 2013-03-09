@@ -42,15 +42,21 @@ public class Quiz1vs1Activity extends Activity {
 	private Button botonGuardar;
 	private ImageView imagenAvatar;
 	
+	//AJUSTES.XML Y PERFIL.XML 
 	private Button botonAtrasAjustes;
 	private Button botonAtrasPerfil;
 	private Button botonPerfil;
 	private Button botonGuardarPerfil;
 	private Button botonGuardarAjustes;
 	private ImageButton botonAjustes;	
+	
 	private RadioButton radioButtonChicos;
 	private RadioButton radioButtonChicas;
 	private GridView gridview;
+	
+	private Button botonAtrasElegirContrincante;
+	private Button botonAleatorio;
+	private Button botonAmigo;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +103,18 @@ public class Quiz1vs1Activity extends Activity {
         radioButtonChicos = (RadioButton) findViewById(R.id.radioButtonChicos);
         gridview = (GridView) findViewById(R.id.gridview);
         
+        //AJUSTES.XML Y PERFIL.XML
         botonAtrasAjustes = (Button) findViewById(R.id.botonAtrasAjustes);
         botonAtrasPerfil = (Button) findViewById(R.id.botonAtrasPerfil);
         botonPerfil = (Button) findViewById(R.id.botonPerfil);
         botonAjustes = (ImageButton) findViewById(R.id.ajustes);
         botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
         botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
+        
+        //ELEGIRCONTRINCANTE.XML
+        botonAtrasElegirContrincante = (Button) findViewById(R.id.botonAtrasElegirContrincante);
+        botonAleatorio = (Button) findViewById(R.id.botonAleatorio);
+        botonAmigo = (Button) findViewById(R.id.botonAmigo);
         
         botonSiguiente.setOnClickListener(new OnClickListener() {
 			

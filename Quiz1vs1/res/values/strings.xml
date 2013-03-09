@@ -39,5 +39,9 @@
     <string name="sonido">Sonido</string>
     <string name="notificaciones">Notificaciones</string>
     <string name="elegirAvatar">Elija un avatar</string>
-
+	<string name="aleatorio">Aleatorio</string>
+	<string name="amigo">Amigo</string>
+	<string name="categoria">Categorias</string>
+	<string name="elegirCategoria">Elija una categoria</string>
+	<string name="jugarAleatorio">Jugar</string>
 </resources>
