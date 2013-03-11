@@ -1,11 +1,14 @@
 package com.infomovil.quiz1vs1;
 
 import java.util.Vector;
+import java.util.prefs.Preferences;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +27,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
 import com.infomovil.quiz1vs1.aplicacion.PreguntasActivity;
@@ -31,6 +35,7 @@ import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
 import com.infomovil.quiz1vs1.modelo.LoginUsuario;
+import com.infomovil.quiz1vs1.modelo.Preferencias;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
 import com.infomovil.quiz1vs1.modelo.Usuario;
 
@@ -64,11 +69,14 @@ public class Quiz1vs1Activity extends Activity {
 	private RadioButton radioButtonChicos;
 	private RadioButton radioButtonChicas;
 	private GridView gridview;
+	private ToggleButton notificaciones;
+	private ToggleButton sonido;
 	
 	private Button botonAtrasElegirContrincante;
 	private Button botonAleatorio;
 	private Button botonAmigo;
 	
+	private Preferencias preferencias; 
 	
 	private static Handler manejador = new Handler(){
 		public void handleMessage(Message msg) {
@@ -83,6 +91,9 @@ public class Quiz1vs1Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pantalla_inicio);
         
+        
+        
+      
         vf = (ViewFlipper) findViewById(R.id.viewFlipper);
         vf.setFlipInterval(2000);
         vf.setFadingEdgeLength(200);
@@ -131,11 +142,18 @@ public class Quiz1vs1Activity extends Activity {
         botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
         botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
         botonNuevaPartida = (ImageButton) findViewById(R.id.nueva_partida);
+        notificaciones = (ToggleButton) findViewById(R.id.toggleButtonNotificaciones);
+        sonido = (ToggleButton) findViewById(R.id.toggleButtonSonido);
         
         //ELEGIRCONTRINCANTE.XML
         botonAtrasElegirContrincante = (Button) findViewById(R.id.botonAtrasElegirContrincante);
         botonAleatorio = (Button) findViewById(R.id.botonAleatorio);
         botonAmigo = (Button) findViewById(R.id.botonAmigo);
+        
+        
+        
+        loadPreferenceValues();
+        ((SharedPreferences) preferencias).registerOnSharedPreferenceChangeListener(preferenecChangeListener);
         
         botonSiguiente.setOnClickListener(new OnClickListener() {
 			
@@ -160,8 +178,14 @@ public class Quiz1vs1Activity extends Activity {
 			public void onClick(View v) {
 				if(imagenAvatar.getBackground() == null)
 					Toast.makeText(getApplicationContext(), "Seleccione un sexo y luego una imagen como avatar", Toast.LENGTH_SHORT).show();
-				else
-					vf.showNext();				
+				else{
+					final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		        	String device_id = tm.getDeviceId();
+		        	LoginUsuario.RegistroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
+		        			editTextApellido.getText().toString(), editTextNick.getText().toString(), spinnerPaises.getSelectedItem().toString()
+		        			, editTextCiudad.getText().toString(), device_id);
+					vf.showNext();
+				}
 			}
 		});             
 
@@ -196,7 +220,8 @@ public class Quiz1vs1Activity extends Activity {
         botonGuardarPerfil.setOnClickListener(new OnClickListener() {        		
         	@Override
         	public void onClick(View v) {
-        		//vf.setDisplayedChild(5);				
+        		LoginUsuario.ActualizarUsuario(editTextNombre.getText().toString(), editTextApellido.getText().toString(),
+        				spinnerPaises.getSelectedItem().toString(), editTextCiudad.getText().toString());				
         	}
         });
 
@@ -247,7 +272,7 @@ public class Quiz1vs1Activity extends Activity {
 				vf.setDisplayedChild(5);				
 			}
 		});               
-        
+		
         Usuario usuariospendientes[] = new Usuario[] {
 			new Usuario("Maria", R.drawable.chica12),
 			new Usuario("Alejandro", R.drawable.chico5)
@@ -264,7 +289,16 @@ public class Quiz1vs1Activity extends Activity {
         listaPartidasPendientes.setAdapter(adapter_p);               
         listaPartidasEnviadas.setAdapter(adapter_r);
     }
-
+	
+	/**
+	 * Loads the preference values and updates their enable status and summary.
+	 */
+	private void loadPreferenceValues() {
+		Preferencias preferencias = new Preferencias(getApplicationContext());
+		notificaciones.setChecked(preferencias.isNotificationEnabled());
+		sonido.setChecked(preferencias.isNotificationEnabled());
+	}
+    
     public void conectarAservidor(){
         	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         	String device_id = tm.getDeviceId();
@@ -277,5 +311,15 @@ public class Quiz1vs1Activity extends Activity {
         getMenuInflater().inflate(R.menu.layout_quiz1vs1, menu);
         return true;
     }
+    
+    private SharedPreferences.OnSharedPreferenceChangeListener preferenecChangeListener = new OnSharedPreferenceChangeListener() {
+		/*
+		 * (non-Javadoc)
+		 * @see android.content.SharedPreferences.OnSharedPreferenceChangeListener#onSharedPreferenceChanged(android.content.SharedPreferences, java.lang.String)
+		 */
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			
+		}
+	};
     
 }

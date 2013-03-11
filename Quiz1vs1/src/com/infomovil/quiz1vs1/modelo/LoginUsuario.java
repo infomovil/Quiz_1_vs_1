@@ -78,6 +78,32 @@ public class LoginUsuario {
 		}*/
 	}
 	
+	public static void ActualizarUsuario(String nombre, String apellidos, String pais, String ciudad){
+		String result = "";
+		//the year data to send
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("nombre",nombre));
+		nameValuePairs.add(new BasicNameValuePair("apellidos",apellidos));
+		nameValuePairs.add(new BasicNameValuePair("pais",pais));
+		nameValuePairs.add(new BasicNameValuePair("ciudad",ciudad));
+		
+		
+		//http post
+		try{
+		        HttpClient httpclient = new DefaultHttpClient();
+		        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/modificarPerfil.php");
+		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		        HttpResponse response = httpclient.execute(httppost);
+		        HttpEntity entity = response.getEntity();
+		        is = entity.getContent();
+		        
+		}catch(Exception e){
+		        Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+		
+	}
+	
+	
 	public static boolean EstaUsuario(String device_id){
 		boolean esta = false;
 		String result = "";
