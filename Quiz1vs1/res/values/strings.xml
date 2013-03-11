@@ -39,6 +39,8 @@
     <string name="sonido">Sonido</string>
     <string name="notificaciones">Notificaciones</string>
     <string name="elegirAvatar">Elija un avatar</string>
+    <string name="puntuacion">Tu puntuación</string>
+    <string name="enviarReto">Enviar reto</string>
 	<string name="aleatorio">Aleatorio</string>
 	<string name="amigo">Amigo</string>
 	<string name="categoria">Categorias</string>
