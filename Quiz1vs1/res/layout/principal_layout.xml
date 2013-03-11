@@ -18,7 +18,7 @@
             android:id="@+id/ajustes"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             android:gravity="left"
             android:src="@drawable/ajustes" />
         <ImageButton
@@ -28,7 +28,7 @@
             android:adjustViewBounds="true"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             android:gravity="center|top"
             android:src="@drawable/logros" />
         <ImageButton
@@ -37,9 +37,19 @@
             android:id="@+id/ranking"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             android:gravity="right"
             android:src="@drawable/podio" />
+        
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/ajustes"
+            android:id="@+id/nueva_partida"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="right"
+            android:src="@drawable/nueva_partida" />
     </LinearLayout>
     	
     <LinearLayout 

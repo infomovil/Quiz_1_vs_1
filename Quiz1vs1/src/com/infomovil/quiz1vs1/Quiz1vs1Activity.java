@@ -1,12 +1,15 @@
 package com.infomovil.quiz1vs1;
 
-import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
-import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
-import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
-import com.infomovil.quiz1vs1.modelo.Usuario;
-import android.os.Bundle;
+import java.util.Vector;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,9 +26,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.infomovil.quiz1vs1.aplicacion.PreguntasActivity;
+import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
+import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
+import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
+import com.infomovil.quiz1vs1.modelo.LoginUsuario;
+import com.infomovil.quiz1vs1.modelo.Pregunta;
+import com.infomovil.quiz1vs1.modelo.Usuario;
+
 public class Quiz1vs1Activity extends Activity {
 	
-	private ViewFlipper vf;
+	private static ViewFlipper vf;
 	private ListView listaPartidasPendientes;
 	private ListView listaPartidasEnviadas;
 	
@@ -49,7 +60,7 @@ public class Quiz1vs1Activity extends Activity {
 	private Button botonGuardarPerfil;
 	private Button botonGuardarAjustes;
 	private ImageButton botonAjustes;	
-	
+	private ImageButton botonNuevaPartida;
 	private RadioButton radioButtonChicos;
 	private RadioButton radioButtonChicas;
 	private GridView gridview;
@@ -57,6 +68,15 @@ public class Quiz1vs1Activity extends Activity {
 	private Button botonAtrasElegirContrincante;
 	private Button botonAleatorio;
 	private Button botonAmigo;
+	
+	
+	private static Handler manejador = new Handler(){
+		public void handleMessage(Message msg) {
+			vf.setDisplayedChild(msg.what);
+		};
+	};
+	
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +130,7 @@ public class Quiz1vs1Activity extends Activity {
         botonAjustes = (ImageButton) findViewById(R.id.ajustes);
         botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
         botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
+        botonNuevaPartida = (ImageButton) findViewById(R.id.nueva_partida);
         
         //ELEGIRCONTRINCANTE.XML
         botonAtrasElegirContrincante = (Button) findViewById(R.id.botonAtrasElegirContrincante);
@@ -178,7 +199,27 @@ public class Quiz1vs1Activity extends Activity {
         		//vf.setDisplayedChild(5);				
         	}
         });
-        		
+
+        botonNuevaPartida.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Vector<Pregunta> preguntas = LoginUsuario.getPreguntas("Animales");
+				for(int i=0; i<preguntas.size();i++){
+					Pregunta p = preguntas.get(i);
+					System.out.println("PREGUNTA: " + p.getPregunta());
+					System.out.println("RESPUESTA1: " + p.getRespuestaCorrecta());
+					System.out.println("RESPUESTA2: " + p.getRespuestaIncorrecta1());
+					System.out.println("RESPUESTA3: " + p.getRespuestaIncorrecta2());
+					System.out.println("RESPUESTA4: " + p.getRespuestaIncorrecta3());
+					System.out.println("----------------------------");
+				}
+				
+				Intent i = new Intent(getBaseContext(), PreguntasActivity.class);
+				startActivity(i);
+			}
+		});
+        
         botonGuardarAjustes.setOnClickListener(new OnClickListener() {        	
         	@Override
         	public void onClick(View v) {
@@ -225,8 +266,11 @@ public class Quiz1vs1Activity extends Activity {
     }
 
     public void conectarAservidor(){
-    	
-    }    
+        	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        	String device_id = tm.getDeviceId();
+        	if(LoginUsuario.EstaUsuario(device_id))
+        		manejador.sendEmptyMessage(3);
+    }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
