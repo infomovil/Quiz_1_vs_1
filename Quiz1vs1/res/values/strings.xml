@@ -46,4 +46,17 @@
 	<string name="categoria">Categorias</string>
 	<string name="elegirCategoria">Elija una categoria</string>
 	<string name="jugarAleatorio">Jugar</string>
+	<string name="puntuacionreto">Puntuación del reto</string>
+	<string name="jugador1">Jugador1</string>
+	<string name="jugador2">Jugador2</string>
+	<string name="continuar">Continuar</string>
+	<string name="ganado">Has ganado</string>
+	<string name="perdido">Has perdido</string>
+	<string name="resultado">Resultado</string>
+	<string name="otracategoria">Elegir categoria para otro reto</string>
+	<string name="puntuacion1">Puntuación1</string>
+	<string name="puntuacion2">Puntuación2</string>
+	<string name="marcador">Marcador</string>
+	<string name="marcador1">Marcador1</string>
+	<string name="marcador2">Marcador2</string>
 </resources>
