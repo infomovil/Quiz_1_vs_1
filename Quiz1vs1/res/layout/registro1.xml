@@ -108,13 +108,15 @@
                     android:id="@+id/editTextNombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName" 
+                    android:capitalize="words"/>
 
                 <EditText
                     android:id="@+id/editTextApellido"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:capitalize="words" />
 
                 <EditText
                     android:id="@+id/editTextNick"
@@ -134,7 +136,8 @@
                     android:id="@+id/editTextCiudad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName" 
+                    android:capitalize="words"/>
 
                 <Button
                     android:layout_gravity="bottom|right"

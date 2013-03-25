@@ -178,13 +178,19 @@ public class PreguntasActivity extends Activity {
 				categoria = bundle.getString("categoria");
 				boolean esPrimerReto = bundle.getBoolean("esPrimerReto");
 				System.out.println(idUsuario + "\n" + contrincante + "\n" + String.valueOf(puntuacion));
-				if(esPrimerReto)
+				if(esPrimerReto){
 					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
-				else
+					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
+					i.putExtra("respondido", true);
+					startActivity(i);
+				}
+				else{
 					LoginUsuario.actualizarResultadoPartida(idUsuario, contrincante, String.valueOf(puntuacion));
-				Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
-				i.putExtra("respondido", true);
-				startActivity(i);
+					Intent i = new Intent(getApplicationContext(), ResponderRetoActivity.class);
+					i.putExtra("mostrarResultado", true);
+					startActivity(i);
+				}
+				
 			}
 		});
 	}

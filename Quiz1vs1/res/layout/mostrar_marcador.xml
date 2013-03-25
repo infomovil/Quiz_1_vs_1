@@ -37,7 +37,7 @@
                 android:orientation="vertical" >
 				
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/jugador1"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
@@ -55,7 +55,7 @@
                 android:orientation="vertical" >
                 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/jugador2"
 					android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
@@ -79,7 +79,7 @@
                 android:orientation="vertical" >
                 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/marcador1"
 					android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
@@ -95,7 +95,7 @@
                 android:orientation="vertical" >
                 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/marcador2"
 					android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"

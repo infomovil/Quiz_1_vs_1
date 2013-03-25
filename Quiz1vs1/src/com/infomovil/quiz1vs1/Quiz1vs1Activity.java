@@ -319,6 +319,7 @@ public class Quiz1vs1Activity extends Activity {
 				bundle.putString("idpreguntas", idPreguntas);
 				bundle.putString("jugador1", idUsuario);
 				bundle.putString("jugador2", contrincante);
+				bundle.putBoolean("mostrarResultado", false);
 				i.putExtras(bundle);
 				startActivity(i);
         		//Toast.makeText(getApplicationContext(), nombreUsuario + "\n " + categoria + "\n " + idPreguntas, Toast.LENGTH_SHORT).show();

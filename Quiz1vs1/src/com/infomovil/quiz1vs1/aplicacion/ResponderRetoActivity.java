@@ -1,10 +1,13 @@
 package com.infomovil.quiz1vs1.aplicacion;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +30,26 @@ public class ResponderRetoActivity extends Activity {
 	private String idPreguntas;
 	private String idUsuario;
 	private String contrincante;
+	private boolean mostrarResultado;
+	
+	//MOSTRAR_PUNTUACION_RETO.XML
+	private TextView nombreJugador1;
+	private TextView puntuacionJugador1;
+	private TextView nombreJugador2;
+	private TextView puntuacionJugador2;
+	private TextView textResultado;
+	private Button botonContinuar;
+	
+	//MOSTRAR_MARCADOR.XML
+	private TextView jugador1;
+	private TextView jugador2;
+	private TextView marcador1;
+	private TextView marcador2;
+	private Button botonOtraCategoria;
+	
+	private String nombreJ1;
+	private String nombreJ2;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,9 +66,91 @@ public class ResponderRetoActivity extends Activity {
 		categoria = (TextView) findViewById(R.id.txtNombreCategoria);
 		textoUsuario.setText(nombreUsuario + " ha elegido:");
 		categoria.setText(categoriaUsuario);
-		pantallasResponderReto.setDisplayedChild(0);
+		mostrarResultado = bundle.getBoolean("mostrarResultado");
+		if(!mostrarResultado)
+			pantallasResponderReto.setDisplayedChild(0);
+		else
+			pantallasResponderReto.setDisplayedChild(1);
 		
 		
+		if(mostrarResultado){
+			Vector<Object> puntuaciones = new Vector<Object>();
+			puntuaciones = LoginUsuario.getResultadoPartida(idUsuario, contrincante);
+			int puntosJ1 = (Integer)puntuaciones.get(1);
+			int puntosJ2 = (Integer)puntuaciones.get(2);
+			nombreJ1 = (String)puntuaciones.get(3);
+			nombreJ2 = (String)puntuaciones.get(4);
+			
+			nombreJugador1 = (TextView)findViewById(R.id.nombreJugador1);
+			puntuacionJugador1 = (TextView)findViewById(R.id.puntuacionJugador1);
+			nombreJugador2 = (TextView)findViewById(R.id.nombreJugador2);
+			puntuacionJugador2 = (TextView)findViewById(R.id.puntuacionJugador2);
+			textResultado = (TextView)findViewById(R.id.textResultado);
+			botonContinuar = (Button)findViewById(R.id.botonContinuar);
+			
+			nombreJugador1.setText(nombreJ1);
+			nombreJugador2.setText(nombreJ2);
+			puntuacionJugador1.setText(puntosJ1);
+			puntuacionJugador2.setText(puntosJ2);
+			
+			int idResultado = (Integer)puntuaciones.get(0);
+			final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+			String device_id = tm.getDeviceId();
+			boolean esJugador1 = LoginUsuario.esJugador1(device_id, ""+idResultado);
+			if(esJugador1){
+				if(puntosJ1>puntosJ2){
+					textResultado.setText("HAS GANADO!!!");
+					LoginUsuario.actualizarMarcadorJ1(idUsuario, contrincante);
+				}
+				else{
+					textResultado.setText("HAS PERDIDO :(");
+					LoginUsuario.actualizarMarcadorJ2(idUsuario, contrincante);
+				}
+			}
+			else{
+				if(puntosJ2>puntosJ1){
+					textResultado.setText("HAS GANADO!!!");
+					LoginUsuario.actualizarMarcadorJ2(idUsuario, contrincante);
+				}
+				else{
+					textResultado.setText("HAS PERDIDO :(");
+					LoginUsuario.actualizarMarcadorJ1(idUsuario, contrincante);
+				}
+			}
+				
+		}
+		botonContinuar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				pantallasResponderReto.setDisplayedChild(2);
+				
+				Vector<Integer> marcadores = new Vector<Integer>();
+				marcadores = LoginUsuario.getMarcadorPartida(idUsuario, contrincante);
+				
+				jugador1 = (TextView)findViewById(R.id.jugador1);
+				jugador2 = (TextView)findViewById(R.id.jugador2);
+				marcador1 = (TextView)findViewById(R.id.marcador1);
+				marcador2 = (TextView)findViewById(R.id.marcador2);
+				botonOtraCategoria = (Button)findViewById(R.id.botonOtraCategoria);
+				
+				marcador1.setText(marcadores.get(0));
+				marcador2.setText(marcadores.get(1));
+				jugador1.setText(nombreJ1);
+				jugador2.setText(nombreJ2);
+				
+			}
+		});
+		
+		botonOtraCategoria.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		btnResponderReto.setOnClickListener(new OnClickListener() {
 			@Override

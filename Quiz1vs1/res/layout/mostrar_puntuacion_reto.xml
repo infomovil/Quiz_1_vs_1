@@ -39,13 +39,17 @@
                 android:orientation="vertical" >
 				
                 <TextView
-                    android:id="@+id/textJugador1"
+                    android:id="@+id/nombreJugador1"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:textColor="#000000"
-                    android:text="@string/jugador1" />
-				
+                    android:textColor="#000000"/>
+				<TextView
+                    android:id="@+id/puntuacionJugador1"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:textColor="#000000"/>
            
 
             </LinearLayout>
@@ -56,12 +60,17 @@
                 android:orientation="vertical" >
                 
                 <TextView
-                    android:id="@+id/textJugador2"
+                    android:id="@+id/nombreJugador2"
 					android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:textColor="#000000"
-                    android:text="@string/jugador2" />  
+                    android:textColor="#000000"/>
+                <TextView
+                    android:id="@+id/puntuacionJugador2"
+					android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:textColor="#000000"/>  
 
             </LinearLayout>
 

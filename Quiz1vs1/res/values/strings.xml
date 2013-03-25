@@ -13,6 +13,7 @@
 	<string name="paises_default">Elige un país</string>
  
     <string-array name="paises_array">
+        <item>Spain</item>
         <item>Malaysia</item>
         <item>United States</item>
         <item>Indonesia</item>
