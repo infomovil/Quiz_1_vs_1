@@ -3,10 +3,15 @@ package com.infomovil.quiz1vs1.aplicacion;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,10 +56,15 @@ public class ResponderRetoActivity extends Activity {
 	private String nombreJ2;
 	private int puntuacion;
 	
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewflipper_responder_reto);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        
 		bundle = this.getIntent().getExtras();
 		nombreUsuario = bundle.getString("nombreUsuario");
 		categoriaUsuario = bundle.getString("categoria");
@@ -107,6 +117,9 @@ public class ResponderRetoActivity extends Activity {
 			int idResultado = (Integer)puntuaciones.get(0);
 			final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			String device_id = tm.getDeviceId();
+			if(device_id == null){
+				device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+			}
 			boolean esJugador1 = LoginUsuario.esJugador1(device_id, ""+idResultado);
 			if(esJugador1){
 				if(puntosJ1>puntosJ2){

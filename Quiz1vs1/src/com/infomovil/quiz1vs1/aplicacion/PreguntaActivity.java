@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.text.Layout;
 import android.util.Base64;
@@ -71,6 +72,10 @@ public class PreguntaActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pregunta);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        
 	    bundle = this.getIntent().getExtras();
 		categoria = bundle.getString("categoria");
 		numPregunta = bundle.getInt("numPregunta");

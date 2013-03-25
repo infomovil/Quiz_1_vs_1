@@ -3,6 +3,7 @@ package com.infomovil.quiz1vs1;
 
 import java.util.Vector;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +13,9 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
@@ -87,13 +91,16 @@ public class Quiz1vs1Activity extends Activity {
 	
 	private String device_id = "";
 	
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pantalla_inicio);
         
         vf = (ViewFlipper) findViewById(R.id.viewFlipper);
         
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         
         boolean respondido = this.getIntent().getBooleanExtra("respondido", false);
         if(respondido)
@@ -278,6 +285,9 @@ public class Quiz1vs1Activity extends Activity {
         };
         final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		device_id = tm.getDeviceId();
+		if(device_id == null){
+			device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+		}
 		partidasPendientes = LoginUsuario.getPartidasPendientes(device_id);
 		partidasRespondidas = LoginUsuario.getPartidasRespondidas(device_id);
 		
@@ -344,6 +354,9 @@ public class Quiz1vs1Activity extends Activity {
     public boolean conectarAservidor(){
         	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         	String device_id = tm.getDeviceId();
+        	if(device_id == null){
+    			device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+    		}
         	return LoginUsuario.estaUsuario(device_id);
     }
     

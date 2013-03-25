@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -90,6 +92,10 @@ public class PreguntasActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewflipper_preguntas);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+		
 		bundle = this.getIntent().getExtras();
 		fin = bundle.getBoolean("final");
 		
@@ -161,6 +167,9 @@ public class PreguntasActivity extends Activity {
 			public void onClick(View v) {
 				final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 				String device_id = tm.getDeviceId();
+				if(device_id == null){
+					device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+				}
 				contrincante = LoginUsuario.buscarAleatorio(device_id);
 				idUsuario = LoginUsuario.getUserId(device_id);				
 				marcador = LoginUsuario.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
