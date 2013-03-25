@@ -1,7 +1,7 @@
 package com.infomovil.quiz1vs1;
 
+
 import java.util.Vector;
-import java.util.prefs.Preferences;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -26,20 +26,25 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
 import com.infomovil.quiz1vs1.aplicacion.PreguntasActivity;
+import com.infomovil.quiz1vs1.aplicacion.ResponderRetoActivity;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
 import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Preferencias;
-import com.infomovil.quiz1vs1.modelo.Pregunta;
 import com.infomovil.quiz1vs1.modelo.Usuario;
 
 public class Quiz1vs1Activity extends Activity {
+	
+	private Vector<Usuario> partidasPendientes;
+	private Vector<Usuario> partidasRespondidas;
+	
 	
 	private static ViewFlipper vf;
 	private ListView listaPartidasPendientes;
@@ -72,10 +77,6 @@ public class Quiz1vs1Activity extends Activity {
 	private ToggleButton notificaciones;
 	private ToggleButton sonido;
 	
-	private Button botonAtrasElegirContrincante;
-	private Button botonAleatorio;
-	private Button botonAmigo;
-	
 	private Preferencias preferencias; 
 	
 	private static Handler manejador = new Handler(){
@@ -84,30 +85,30 @@ public class Quiz1vs1Activity extends Activity {
 		};
 	};
 	
-	
+	private String device_id = "";
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pantalla_inicio);
         
-        
-        
-      
         vf = (ViewFlipper) findViewById(R.id.viewFlipper);
-        vf.setFlipInterval(2000);
-        vf.setFadingEdgeLength(200);
-        vf.startFlipping();        
+        
+        
+        boolean respondido = this.getIntent().getBooleanExtra("respondido", false);
+        if(respondido)
+        	vf.setDisplayedChild(3);
+        	
         final ProgressDialog pd = ProgressDialog.show(this,"","Cargando...",true, false);
     		new Thread(new Runnable(){
 	    		public void run(){
 		    		try {		    			
-						Thread.sleep(2500);
-						//Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
-						//startActivity(i);
-						//Conectarse al servidor
-						conectarAservidor();
-						vf.stopFlipping();
+						Thread.sleep(2000);
+						if(conectarAservidor()){
+							manejador.sendEmptyMessage(3);							
+						}
+						else
+							manejador.sendEmptyMessage(1);						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -145,15 +146,10 @@ public class Quiz1vs1Activity extends Activity {
         notificaciones = (ToggleButton) findViewById(R.id.toggleButtonNotificaciones);
         sonido = (ToggleButton) findViewById(R.id.toggleButtonSonido);
         
-        //ELEGIRCONTRINCANTE.XML
-        botonAtrasElegirContrincante = (Button) findViewById(R.id.botonAtrasElegirContrincante);
-        botonAleatorio = (Button) findViewById(R.id.botonAleatorio);
-        botonAmigo = (Button) findViewById(R.id.botonAmigo);
         
-        
-        
+        preferencias = new Preferencias(getApplicationContext());
         loadPreferenceValues();
-        ((SharedPreferences) preferencias).registerOnSharedPreferenceChangeListener(preferenecChangeListener);
+        preferencias.getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenecChangeListener);
         
         botonSiguiente.setOnClickListener(new OnClickListener() {
 			
@@ -178,12 +174,13 @@ public class Quiz1vs1Activity extends Activity {
 			public void onClick(View v) {
 				if(imagenAvatar.getBackground() == null)
 					Toast.makeText(getApplicationContext(), "Seleccione un sexo y luego una imagen como avatar", Toast.LENGTH_SHORT).show();
-				else{
-					final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		        	String device_id = tm.getDeviceId();
-		        	LoginUsuario.RegistroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
+				else{					
+		        	int imagenID = (Integer) imagenAvatar.getTag();
+		        	String imagen = "" + imagenID;
+		        	System.out.println("IMAGEN ID: " + imagen);
+		        	LoginUsuario.registroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
 		        			editTextApellido.getText().toString(), editTextNick.getText().toString(), spinnerPaises.getSelectedItem().toString()
-		        			, editTextCiudad.getText().toString(), device_id);
+		        			, editTextCiudad.getText().toString(), imagen, device_id);
 					vf.showNext();
 				}
 			}
@@ -191,7 +188,11 @@ public class Quiz1vs1Activity extends Activity {
 
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                imagenAvatar.setBackgroundResource((int)parent.getAdapter().getItemId(position));
+                long iden = parent.getAdapter().getItemId(position);
+                System.out.println(iden);
+            	imagenAvatar.setBackgroundResource((int)parent.getAdapter().getItemId(position));
+                imagenAvatar.setTag((int)parent.getAdapter().getItemId(position));
+                
             }
         });
         
@@ -220,7 +221,7 @@ public class Quiz1vs1Activity extends Activity {
         botonGuardarPerfil.setOnClickListener(new OnClickListener() {        		
         	@Override
         	public void onClick(View v) {
-        		LoginUsuario.ActualizarUsuario(editTextNombre.getText().toString(), editTextApellido.getText().toString(),
+        		LoginUsuario.actualizarUsuario(editTextNombre.getText().toString(), editTextApellido.getText().toString(),
         				spinnerPaises.getSelectedItem().toString(), editTextCiudad.getText().toString());				
         	}
         });
@@ -229,18 +230,10 @@ public class Quiz1vs1Activity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Vector<Pregunta> preguntas = LoginUsuario.getPreguntas("Animales");
-				for(int i=0; i<preguntas.size();i++){
-					Pregunta p = preguntas.get(i);
-					System.out.println("PREGUNTA: " + p.getPregunta());
-					System.out.println("RESPUESTA1: " + p.getRespuestaCorrecta());
-					System.out.println("RESPUESTA2: " + p.getRespuestaIncorrecta1());
-					System.out.println("RESPUESTA3: " + p.getRespuestaIncorrecta2());
-					System.out.println("RESPUESTA4: " + p.getRespuestaIncorrecta3());
-					System.out.println("----------------------------");
-				}
-				
 				Intent i = new Intent(getBaseContext(), PreguntasActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putBoolean("final", false);
+				i.putExtras(bundle);
 				startActivity(i);
 			}
 		});
@@ -274,20 +267,63 @@ public class Quiz1vs1Activity extends Activity {
 		});               
 		
         Usuario usuariospendientes[] = new Usuario[] {
-			new Usuario("Maria", R.drawable.chica12),
-			new Usuario("Alejandro", R.drawable.chico5)
+			/*new Usuario("Maria", R.drawable.chica12),
+			new Usuario("Alejandro", R.drawable.chico5)*/
         };
 
         Usuario usuariosrespondidos[] = new Usuario[] {
-			new Usuario("Maria", R.drawable.avatar1),
+			/*new Usuario("Maria", R.drawable.avatar1),
 			new Usuario("Alejandro", R.drawable.avatar2),
-			new Usuario("Raul", R.drawable.chico13)
+			new Usuario("Raul", R.drawable.chico13)*/
         };
-                
+        final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		device_id = tm.getDeviceId();
+		partidasPendientes = LoginUsuario.getPartidasPendientes(device_id);
+		partidasRespondidas = LoginUsuario.getPartidasRespondidas(device_id);
+		
+		if(partidasPendientes != null){
+			usuariospendientes = new Usuario[partidasPendientes.size()];
+			for(int i = 0; i < partidasPendientes.size(); i++){
+				Usuario u = partidasPendientes.get(i);	
+				usuariospendientes[i] = partidasPendientes.get(i);
+			}
+		}
+		if(partidasRespondidas != null){
+			usuariosrespondidos = new Usuario[partidasRespondidas.size()];
+			for(int i = 0; i < partidasRespondidas.size(); i++){
+				Usuario u = partidasRespondidas.get(i);				
+				usuariosrespondidos[i] = u;
+			}
+		}
         UsuariosPendientesAdapter adapter_p = new UsuariosPendientesAdapter(this, R.layout.item, usuariospendientes);
         UsuariosPendientesAdapter adapter_r = new UsuariosPendientesAdapter(this, R.layout.item, usuariosrespondidos);
-        listaPartidasPendientes.setAdapter(adapter_p);               
+        listaPartidasPendientes.setAdapter(adapter_p);          
         listaPartidasEnviadas.setAdapter(adapter_r);
+        
+        listaPartidasPendientes.setOnItemClickListener(new OnItemClickListener() {
+        	@Override
+        	public void onItemClick(AdapterView<?> arg0, View view, int arg2,
+        			long arg3) {
+        		
+        		TextView nombre = (TextView) view.findViewById(R.id.nombreUsuario);
+        		String nombreUsuario = nombre.getText().toString();
+        		String idUsuario = LoginUsuario.getUserId(device_id);
+        		String contrincante = LoginUsuario.getUserIdNick(nombreUsuario);
+        		String categoria = LoginUsuario.getCategoriaUsuario(idUsuario, contrincante);
+        		String idPreguntas = LoginUsuario.getPreguntasReto(idUsuario, contrincante);
+        		Intent i = new Intent(getBaseContext(), ResponderRetoActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putBoolean("esPrimerReto", false);
+				bundle.putString("nombreUsuario", nombreUsuario);
+				bundle.putString("categoria", categoria);
+				bundle.putString("idpreguntas", idPreguntas);
+				bundle.putString("jugador1", idUsuario);
+				bundle.putString("jugador2", contrincante);
+				i.putExtras(bundle);
+				startActivity(i);
+        		//Toast.makeText(getApplicationContext(), nombreUsuario + "\n " + categoria + "\n " + idPreguntas, Toast.LENGTH_SHORT).show();
+        	}
+		});
     }
 	
 	/**
@@ -299,11 +335,10 @@ public class Quiz1vs1Activity extends Activity {
 		sonido.setChecked(preferencias.isNotificationEnabled());
 	}
     
-    public void conectarAservidor(){
+    public boolean conectarAservidor(){
         	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         	String device_id = tm.getDeviceId();
-        	if(LoginUsuario.EstaUsuario(device_id))
-        		manejador.sendEmptyMessage(3);
+        	return LoginUsuario.estaUsuario(device_id);
     }
     
     @Override
@@ -321,5 +356,19 @@ public class Quiz1vs1Activity extends Activity {
 			
 		}
 	};
-    
+		
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
 }

@@ -90,7 +90,6 @@
                 android:contentDescription="@string/puntuacion"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/error"
                 android:layout_marginLeft="20dp"
 	            android:layout_marginRight="10dp" />
 
@@ -155,7 +154,6 @@
                 android:contentDescription="@string/puntuacion"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/correcto"
                 android:layout_marginLeft="20dp"
 	            android:layout_marginRight="10dp" />
 
@@ -187,7 +185,6 @@
                 android:contentDescription="@string/puntuacion"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/error"
                 android:layout_marginLeft="20dp"
 	            android:layout_marginRight="10dp" />
 
@@ -209,7 +206,7 @@
         android:gravity="center" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/enviarReto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/enviarReto" />

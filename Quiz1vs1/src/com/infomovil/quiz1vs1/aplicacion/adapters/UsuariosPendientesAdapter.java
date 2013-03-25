@@ -48,11 +48,14 @@ public class UsuariosPendientesAdapter extends ArrayAdapter<Usuario> {
         } else {
             holder = (UsuariosHolder)row.getTag();
         }
-        
         Usuario usuario = usuarios[position];
-        holder.txtTitle.setText(usuario.getNombreUsuario());
-        holder.imgIcon.setImageResource(usuario.getResource_image());
-        
+        if(usuario != null){
+	        holder.txtTitle.setText(usuario.getNombreUsuario());
+	        holder.imgIcon.setImageResource(usuario.getResource_image());
+        }
+        else{
+        	holder.txtTitle.setText("No tienes partidas");
+        }
         return row;
     }
 }

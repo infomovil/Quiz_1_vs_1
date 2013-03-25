@@ -26,6 +26,8 @@
         </activity>
         <activity android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" android:label="@string/titulo" android:name=".aplicacion.PrincipalActivity"></activity>
         <activity android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" android:screenOrientation="portrait" android:name=".aplicacion.PreguntasActivity"></activity>
+        <activity android:name=".aplicacion.PreguntaActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".aplicacion.ResponderRetoActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

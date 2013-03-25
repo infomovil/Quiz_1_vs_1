@@ -61,7 +61,7 @@ public class BDUsuarios {
 	    return comments;
 	  }*/
 	
-	  private Usuario cursorToUsuario(Cursor cursor) {
+	  public Usuario cursorToUsuario(Cursor cursor) {
 	    Usuario u = new Usuario();
 	    u.setEmail(cursor.getString(0));
 	    u.setNombreUsuario(cursor.getString(1));
@@ -81,7 +81,7 @@ public class BDUsuarios {
 	              	String usuario = c.getString(0);
 	              	String email = c.getString(1);
 	         	} while(c.moveToNext());
-	    	}*/
+	      }*/
 		  return c.moveToFirst();
 	  }
 }

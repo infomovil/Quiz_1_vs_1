@@ -19,7 +19,7 @@ public class Preferencias {
 		this.context = context;
 	}
 	
-	private SharedPreferences getSharedPreferences() {
+	public SharedPreferences getSharedPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	

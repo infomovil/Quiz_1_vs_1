@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pantallasPreguntas"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <include layout="@layout/elegir_contrincante" />
+
+    <include layout="@layout/categorias" />
+
+<!--     <include android:id="@+id/pregunta1" layout="@layout/pregunta" /> -->
+
+<!--     <include android:id="@+id/pregunta2" layout="@layout/pregunta" /> -->
+
+<!--     <include android:id="@+id/pregunta3" layout="@layout/pregunta" /> -->
+
+<!--     <include android:id="@+id/pregunta4" layout="@layout/pregunta" /> -->
+
+<!--     <include android:id="@+id/pregunta5" layout="@layout/pregunta" /> -->
+
+    <include layout="@layout/resultado_partida" />
+
+</ViewFlipper>
