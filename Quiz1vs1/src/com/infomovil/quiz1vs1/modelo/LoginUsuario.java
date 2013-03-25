@@ -671,9 +671,9 @@ public class LoginUsuario {
 	public static void actualizarResultadoPartida(String idusuario1, String idusuario2, String puntuacion2){
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("puntuacion2",puntuacion2));
 		nameValuePairs.add(new BasicNameValuePair("idusuario1",idusuario1));
 		nameValuePairs.add(new BasicNameValuePair("idusuario2",idusuario2));
-		nameValuePairs.add(new BasicNameValuePair("puntuacion2",puntuacion2));
 		try{
 		        HttpClient httpclient = new DefaultHttpClient();
 		        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/actualizarResultadoPartida.php");
@@ -707,7 +707,8 @@ public class LoginUsuario {
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("idUsuario1",idUsuario1));
 		nameValuePairs.add(new BasicNameValuePair("idUsuario2",idUsuario2));
-		
+		System.out.println(idUsuario1);
+		System.out.println(idUsuario2);
 		//http post
 		try{
 		        HttpClient httpclient = new DefaultHttpClient();
@@ -735,6 +736,7 @@ public class LoginUsuario {
 		        Log.e("log_tag", "Error converting result "+e.toString());
 		}
 		try{
+			System.out.println("RESULTADO MOSTRAR RESUL: " + result);
 			if(result!=null){
 		        JSONArray jArray = new JSONArray(result);
 		        for(int i=0;i<jArray.length();i++){
@@ -744,6 +746,12 @@ public class LoginUsuario {
 		                int puntuacion2 = json_data.getInt("puntuacion2");
 		                String nick1 = json_data.getString("nick1");
 		                String nick2 = json_data.getString("nick2");
+		                
+		                System.out.println(idResultado);
+		                System.out.println(puntuacion1);
+		                System.out.println(puntuacion2);
+		                System.out.println(nick1);
+		                System.out.println(nick2);
 		                
 		                puntuaciones.add(idResultado);
 		                puntuaciones.add(puntuacion1);

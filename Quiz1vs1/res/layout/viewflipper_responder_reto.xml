@@ -7,5 +7,5 @@
     <include layout="@layout/categoria_reto" />
     <include layout="@layout/mostrar_puntuacion_reto" />
     <include layout="@layout/mostrar_marcador" />
-
+	<include layout="@layout/categorias" />
 </ViewFlipper>

@@ -49,6 +49,7 @@ public class ResponderRetoActivity extends Activity {
 	
 	private String nombreJ1;
 	private String nombreJ2;
+	private int puntuacion;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class ResponderRetoActivity extends Activity {
 		idPreguntas = bundle.getString("idpreguntas");
 		idUsuario = bundle.getString("jugador1");
 		contrincante = bundle.getString("jugador2");
+		puntuacion = bundle.getInt("puntuacion");
 		pantallasResponderReto = (ViewFlipper) findViewById(R.id.pantallasResponderReto);
 		btnResponderReto = (Button) findViewById(R.id.btnResponderReto);
 		textoUsuario = (TextView) findViewById(R.id.txtUsuario);
@@ -67,6 +69,20 @@ public class ResponderRetoActivity extends Activity {
 		textoUsuario.setText(nombreUsuario + " ha elegido:");
 		categoria.setText(categoriaUsuario);
 		mostrarResultado = bundle.getBoolean("mostrarResultado");
+		
+		nombreJugador1 = (TextView)findViewById(R.id.nombreJugador1);
+		puntuacionJugador1 = (TextView)findViewById(R.id.puntuacionJugador1);
+		nombreJugador2 = (TextView)findViewById(R.id.nombreJugador2);
+		puntuacionJugador2 = (TextView)findViewById(R.id.puntuacionJugador2);
+		textResultado = (TextView)findViewById(R.id.textResultado);
+		botonContinuar = (Button)findViewById(R.id.botonContinuar);
+		
+		jugador1 = (TextView)findViewById(R.id.jugador1);
+		jugador2 = (TextView)findViewById(R.id.jugador2);
+		marcador1 = (TextView)findViewById(R.id.marcador1);
+		marcador2 = (TextView)findViewById(R.id.marcador2);
+		botonOtraCategoria = (Button)findViewById(R.id.botonOtraCategoria);
+		
 		if(!mostrarResultado)
 			pantallasResponderReto.setDisplayedChild(0);
 		else
@@ -75,23 +91,18 @@ public class ResponderRetoActivity extends Activity {
 		
 		if(mostrarResultado){
 			Vector<Object> puntuaciones = new Vector<Object>();
+			System.out.println("ID1: " + idUsuario);
+			System.out.println("ID2: " + contrincante);
 			puntuaciones = LoginUsuario.getResultadoPartida(idUsuario, contrincante);
 			int puntosJ1 = (Integer)puntuaciones.get(1);
 			int puntosJ2 = (Integer)puntuaciones.get(2);
 			nombreJ1 = (String)puntuaciones.get(3);
 			nombreJ2 = (String)puntuaciones.get(4);
 			
-			nombreJugador1 = (TextView)findViewById(R.id.nombreJugador1);
-			puntuacionJugador1 = (TextView)findViewById(R.id.puntuacionJugador1);
-			nombreJugador2 = (TextView)findViewById(R.id.nombreJugador2);
-			puntuacionJugador2 = (TextView)findViewById(R.id.puntuacionJugador2);
-			textResultado = (TextView)findViewById(R.id.textResultado);
-			botonContinuar = (Button)findViewById(R.id.botonContinuar);
-			
 			nombreJugador1.setText(nombreJ1);
 			nombreJugador2.setText(nombreJ2);
-			puntuacionJugador1.setText(puntosJ1);
-			puntuacionJugador2.setText(puntosJ2);
+			puntuacionJugador1.setText(""+puntosJ1);
+			puntuacionJugador2.setText(""+puntuacion);
 			
 			int idResultado = (Integer)puntuaciones.get(0);
 			final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -123,20 +134,14 @@ public class ResponderRetoActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				LoginUsuario.actualizarResultadoPartida(idUsuario, contrincante, String.valueOf(puntuacion));
 				pantallasResponderReto.setDisplayedChild(2);
 				
 				Vector<Integer> marcadores = new Vector<Integer>();
-				marcadores = LoginUsuario.getMarcadorPartida(idUsuario, contrincante);
+				marcadores = LoginUsuario.getMarcadorPartida(idUsuario, contrincante);							
 				
-				jugador1 = (TextView)findViewById(R.id.jugador1);
-				jugador2 = (TextView)findViewById(R.id.jugador2);
-				marcador1 = (TextView)findViewById(R.id.marcador1);
-				marcador2 = (TextView)findViewById(R.id.marcador2);
-				botonOtraCategoria = (Button)findViewById(R.id.botonOtraCategoria);
-				
-				marcador1.setText(marcadores.get(0));
-				marcador2.setText(marcadores.get(1));
+				marcador1.setText(""+marcadores.get(0));
+				marcador2.setText(""+marcadores.get(1));
 				jugador1.setText(nombreJ1);
 				jugador2.setText(nombreJ2);
 				
@@ -144,10 +149,8 @@ public class ResponderRetoActivity extends Activity {
 		});
 		
 		botonOtraCategoria.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				
 			}
 		});

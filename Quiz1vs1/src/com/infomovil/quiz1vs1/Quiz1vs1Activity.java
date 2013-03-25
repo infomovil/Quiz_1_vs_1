@@ -312,6 +312,11 @@ public class Quiz1vs1Activity extends Activity {
         		String categoria = LoginUsuario.getCategoriaUsuario(idUsuario, contrincante);
         		String idPreguntas = LoginUsuario.getPreguntasReto(idUsuario, contrincante);
         		Intent i = new Intent(getBaseContext(), ResponderRetoActivity.class);
+        		System.out.println("IDUSUARIO: " + idUsuario);
+        		System.out.println("CONTRINCANTE: " + contrincante);
+        		System.out.println("CATEGORIA: " + categoria);
+        		System.out.println("IDPREGUNTAS: " + idPreguntas);
+        		System.out.println("NOMBREUSUARIO: " + nombreUsuario);
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("esPrimerReto", false);
 				bundle.putString("nombreUsuario", nombreUsuario);

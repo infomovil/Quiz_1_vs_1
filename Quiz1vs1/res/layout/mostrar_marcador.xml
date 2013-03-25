@@ -41,8 +41,8 @@
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:textColor="#000000"
-                    android:text="@string/jugador1" />
+                    android:textSize="20sp"
+                    android:textColor="#000000" />
 				
            
 
@@ -59,8 +59,8 @@
 					android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:textColor="#000000"
-                    android:text="@string/jugador2" />  
+                    android:textSize="20sp"
+                    android:textColor="#000000" />  
 
             </LinearLayout>
 
@@ -84,7 +84,7 @@
                     android:layout_height="50dp"
                     android:gravity="center"
                     android:textColor="#000000"
-                    android:text="@string/marcador1" />  
+                    android:textSize="20sp" />  
 
             </LinearLayout>
         
@@ -100,7 +100,7 @@
                     android:layout_height="50dp"
                     android:gravity="center"
                     android:textColor="#000000"
-                    android:text="@string/marcador2" />  
+					android:textSize="20sp" />  
 
             </LinearLayout>
         </LinearLayout>
