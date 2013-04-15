@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/fondo"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ranking"
+            android:gravity="center"
+            android:fontFamily="Arial"
+            android:textColor="#000000"
+            android:textSize="30sp" />
+        
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="300dp" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" 
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="15dp">
+            <TextView
+	            android:id="@+id/textoNumero"
+	            android:textSize="20sp"
+	            android:textColor="#424242"
+	            android:layout_marginLeft="20dp"
+	            android:layout_marginRight="10dp"
+	            />
+
+            <ImageView
+                android:id="@+id/textoUsuario"
+                android:contentDescription="@string/jugador1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
+	            android:layout_marginRight="10dp" />
+
+            <TextView
+                android:id="@+id/textoPuntos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" 
+                android:layout_marginLeft="20dp"
+	            android:layout_marginRight="10dp"
+	            android:textColor="#424242"/>
+            
+        </TableRow>
+
+        
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/atrasRanking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/atras" />
+
+    </LinearLayout>
+
+</LinearLayout>
