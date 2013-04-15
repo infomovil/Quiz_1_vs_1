@@ -61,4 +61,13 @@
 	<string name="marcador1">Marcador1</string>
 	<string name="marcador2">Marcador2</string>
 	<string name="responder_reto">Responder reto</string>
+	<string name="busqueda_default">Seleccione cómo buscar contrincante</string>
+ 
+    <string-array name="busqueda_array">
+        <item>Por nick</item>
+        <item>Por email</item>
+        <item>Por ciudad</item>
+    </string-array>
+    <string name="buscar">Buscar</string>
+    
 </resources>
