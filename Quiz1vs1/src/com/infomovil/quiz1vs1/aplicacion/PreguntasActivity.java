@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -26,12 +27,15 @@ import com.infomovil.quiz1vs1.Quiz1vs1Activity;
 import com.infomovil.quiz1vs1.R;
 import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
+import com.infomovil.quiz1vs1.modelo.Usuario;
 
 public class PreguntasActivity extends Activity {
 
 	private Button botonAleatorio;
 	private Button botonAtrasElegirContrincante;
 	private Button botonAmigo;
+	
+	
 	
 	private ViewFlipper pantallasPreguntas;
 	private ListView listViewCategorias;
@@ -79,6 +83,11 @@ public class PreguntasActivity extends Activity {
 	private String marcador = "";
 	
 	private Bundle bundle;
+	
+	private Spinner spinnerBusqueda;
+	private TextView valorBusqueda;
+	private Button botonBuscarContrincante;
+	private ListView listaAdversarios;
 	
 	private boolean fin = false;
 	private boolean esPrimerReto;
@@ -130,6 +139,13 @@ public class PreguntasActivity extends Activity {
 		tiempo4 = (TextView) findViewById(R.id.tiempo4);
 		tiempo5 = (TextView) findViewById(R.id.tiempo5);
 		enviarReto = (Button) findViewById(R.id.enviarReto);
+		
+		//BUSCAR_ADVERSARIO.XML
+		spinnerBusqueda = (Spinner) findViewById(R.id.spinnerBusqueda);
+		valorBusqueda = (TextView) findViewById(R.id.valorBusqueda);
+		botonBuscarContrincante = (Button) findViewById(R.id.botonBuscarContrincante);
+		listaAdversarios = (ListView) findViewById(R.id.listaAdversarios);
+		
 		
 		if(fin){
 			cargarDatosPuntuacion(bundle);
@@ -222,6 +238,32 @@ public class PreguntasActivity extends Activity {
 			}
 		});
 		
+		botonAmigo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				pantallasPreguntas.setDisplayedChild(3);
+				
+			}
+		});
+		
+		botonBuscarContrincante.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String campo_busqueda = spinnerBusqueda.getSelectedItem().toString();
+				String valor_busqueda = valorBusqueda.getText().toString();
+				Vector<Usuario> usuarios = LoginUsuario.buscarAdversario(campo_busqueda, valor_busqueda);
+				Vector<String> adversarios = new Vector<String>();
+				for(int i=0; i<usuarios.size(); i++){
+					adversarios.add(usuarios.get(i).getNick());
+				}
+				
+				listaAdversarios.setAdapter(new ArrayAdapter<String>
+				(getApplicationContext(),R.layout.item_categorias, adversarios));
+				
+			}
+		});
 		enviarReto.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

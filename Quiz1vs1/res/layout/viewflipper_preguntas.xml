@@ -19,5 +19,7 @@
 <!--     <include android:id="@+id/pregunta5" layout="@layout/pregunta" /> -->
 
     <include layout="@layout/resultado_partida" />
+    
+    <include layout="@layout/buscar_adversario" />
 
 </ViewFlipper>

@@ -25,7 +25,7 @@
         android:prompt="@string/busqueda_default" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/valorBusqueda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10">
@@ -39,5 +39,11 @@
         android:layout_height="wrap_content"
         android:text="@string/buscar"
         android:layout_marginTop="30dp" />
+
+    <ListView
+        android:id="@+id/listaAdversarios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
  
 </LinearLayout>
