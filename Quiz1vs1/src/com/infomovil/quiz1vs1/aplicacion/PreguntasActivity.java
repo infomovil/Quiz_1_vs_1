@@ -3,6 +3,7 @@ package com.infomovil.quiz1vs1.aplicacion;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -80,6 +81,8 @@ public class PreguntasActivity extends Activity {
 	private Bundle bundle;
 	
 	private boolean fin = false;
+	private boolean esPrimerReto;
+	private boolean respondiendo;
 	/*private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			pantallasPreguntas.setDisplayedChild(msg.what);
@@ -88,6 +91,7 @@ public class PreguntasActivity extends Activity {
 	};*/
 	
 	
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +102,8 @@ public class PreguntasActivity extends Activity {
 		
 		bundle = this.getIntent().getExtras();
 		fin = bundle.getBoolean("final");
+		esPrimerReto = bundle.getBoolean("esPrimerReto");
+		respondiendo = bundle.getBoolean("respondiendo");
 		
 		//ELEGIRCONTRINCANTE.XML
         botonAtrasElegirContrincante = (Button) findViewById(R.id.botonAtrasElegirContrincante);
@@ -128,7 +134,10 @@ public class PreguntasActivity extends Activity {
 		if(fin){
 			cargarDatosPuntuacion(bundle);
 			pantallasPreguntas.setDisplayedChild(2);
-		}else{
+		} 
+		if(respondiendo){
+			System.out.println("entro por respondiendo");
+			pantallasPreguntas.setDisplayedChild(1);
 			Vector<String> listaCategorias = LoginUsuario.getCategorias();
 			listViewCategorias.setAdapter(new ArrayAdapter<String>(this,
 					R.layout.item_categorias, listaCategorias));
@@ -137,7 +146,7 @@ public class PreguntasActivity extends Activity {
 				public void onItemClick(AdapterView<?> arg0, View view, int arg2,
 						long arg3) {								
 					categoria = ((TextView) view).getText().toString();
-					if(categoria.equals("Animales")){						
+					if(categoria.equals("Animales") || categoria.equals("Calculo")){						
 						Bundle bundle = new Bundle();
 						bundle.putString("categoria", categoria);
 						bundle.putInt("numPregunta", 0);
@@ -146,9 +155,45 @@ public class PreguntasActivity extends Activity {
 						bundle.putString("jugador1",idUsuario);
 						bundle.putString("jugador2", contrincante);
 						bundle.putString("marcador", marcador);
-						bundle.putBoolean("esPrimerReto", true);
+						bundle.putBoolean("esPrimerReto", esPrimerReto);
+						bundle.putBoolean("respondiendo", true);
 						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
 						ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
+						idPreguntas = getIdPreguntas(preguntas);
+						bundle.putString("idPreguntas", idPreguntas);
+						i.putParcelableArrayListExtra("preguntas", preguntas);
+						i.putExtras(bundle);
+						startActivity(i);
+					}
+					else
+						Toast.makeText(getApplicationContext(), "No hay preguntas para esta categoría todavía", Toast.LENGTH_SHORT).show();
+				}
+			});
+		} 
+		if (esPrimerReto){
+			System.out.println("entro por primer reto");
+			Vector<String> listaCategorias = LoginUsuario.getCategorias();
+			listViewCategorias.setAdapter(new ArrayAdapter<String>(this,
+					R.layout.item_categorias, listaCategorias));
+			listViewCategorias.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View view, int arg2,
+						long arg3) {								
+					categoria = ((TextView) view).getText().toString();
+					if(categoria.equals("Animales") || categoria.equals("Calculo")){						
+						Bundle bundle = new Bundle();
+						bundle.putString("categoria", categoria);
+						bundle.putInt("numPregunta", 0);
+						bundle.putInt("resultado", 0);
+						bundle.putInt("combo", 0);
+						bundle.putString("jugador1",idUsuario);
+						bundle.putString("jugador2", contrincante);
+						bundle.putString("marcador", marcador);
+						bundle.putBoolean("esPrimerReto", esPrimerReto);
+						bundle.putBoolean("respondiendo", false);
+						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
+						ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
+						System.out.println("sigo despues de recoger preguntas");
 						idPreguntas = getIdPreguntas(preguntas);
 						bundle.putString("idPreguntas", idPreguntas);
 						i.putParcelableArrayListExtra("preguntas", preguntas);
@@ -186,7 +231,8 @@ public class PreguntasActivity extends Activity {
 				idPreguntas = bundle.getString("idPreguntas");
 				categoria = bundle.getString("categoria");
 				boolean esPrimerReto = bundle.getBoolean("esPrimerReto");
-				System.out.println(idUsuario + "\n" + contrincante + "\n" + String.valueOf(puntuacion) + "\n" + esPrimerReto);
+				boolean respondiendo = bundle.getBoolean("responidendo");
+				System.out.println(idUsuario + "\n" + contrincante + "\n" + String.valueOf(puntuacion) + "\n" + esPrimerReto + "\n" + respondiendo);
 				if(esPrimerReto){
 					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
 					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
@@ -199,6 +245,10 @@ public class PreguntasActivity extends Activity {
 					i.putExtra("jugador2", contrincante);
 					i.putExtra("puntuacion", puntuacion);
 					i.putExtra("mostrarResultado", true);
+					String idMarcador = LoginUsuario.getIDMarcador(idUsuario, contrincante);
+					System.out.println("ID MARCADOR: " + idMarcador);
+					i.putExtra("idMarcador", idMarcador);
+					LoginUsuario.actualizarResultadoPartida(idUsuario, contrincante, String.valueOf(puntuacion));
 					startActivity(i);
 				}
 				

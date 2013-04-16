@@ -3,10 +3,14 @@ package com.infomovil.quiz1vs1;
 
 import java.util.Vector;
 
+import org.apache.http.conn.HttpHostConnectException;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -83,9 +87,23 @@ public class Quiz1vs1Activity extends Activity {
 	
 	private Preferencias preferencias; 
 	
-	private static Handler manejador = new Handler(){
+	private Handler manejador = new Handler(){
 		public void handleMessage(Message msg) {
-			vf.setDisplayedChild(msg.what);
+			if(msg.what != 9)
+				vf.setDisplayedChild(msg.what);
+			else{
+				AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext()).create();
+				alertDialog.setTitle("Error al iniciar conexion ");
+				alertDialog.setMessage("Lo sentimos, no se ha podido conectar con el servidor.");
+				alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Reintentar", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						conectarAservidor();
+					}
+				});
+				alertDialog.setIcon(R.drawable.error);
+				alertDialog.show();
+			}
 		};
 	};
 	
@@ -184,7 +202,7 @@ public class Quiz1vs1Activity extends Activity {
 				else{					
 		        	int imagenID = (Integer) imagenAvatar.getTag();
 		        	String imagen = "" + imagenID;
-		        	System.out.println("IMAGEN ID: " + imagen);
+		        	//System.out.println("IMAGEN ID: " + imagen);
 		        	LoginUsuario.registroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
 		        			editTextApellido.getText().toString(), editTextNick.getText().toString(), spinnerPaises.getSelectedItem().toString()
 		        			, editTextCiudad.getText().toString(), imagen, device_id);
@@ -196,7 +214,7 @@ public class Quiz1vs1Activity extends Activity {
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 long iden = parent.getAdapter().getItemId(position);
-                System.out.println(iden);
+                //System.out.println(iden);
             	imagenAvatar.setBackgroundResource((int)parent.getAdapter().getItemId(position));
                 imagenAvatar.setTag((int)parent.getAdapter().getItemId(position));
                 
@@ -240,6 +258,8 @@ public class Quiz1vs1Activity extends Activity {
 				Intent i = new Intent(getBaseContext(), PreguntasActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("final", false);
+				bundle.putBoolean("esPrimerReto", true);
+				bundle.putBoolean("respondiendo", false);
 				i.putExtras(bundle);
 				startActivity(i);
 			}
@@ -352,12 +372,19 @@ public class Quiz1vs1Activity extends Activity {
 	}
     
     public boolean conectarAservidor(){
+    		boolean conectado = false;
         	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         	String device_id = tm.getDeviceId();
         	if(device_id == null){
     			device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
     		}
-        	return LoginUsuario.estaUsuario(device_id);
+        	try{
+        		conectado = LoginUsuario.estaUsuario(device_id);
+        	}
+        	catch (HttpHostConnectException e) {
+				manejador.sendEmptyMessage(9);
+			}
+        	return conectado;
     }
     
     @Override

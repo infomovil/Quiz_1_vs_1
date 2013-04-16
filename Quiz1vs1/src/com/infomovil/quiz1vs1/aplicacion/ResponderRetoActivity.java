@@ -55,6 +55,7 @@ public class ResponderRetoActivity extends Activity {
 	private String nombreJ1;
 	private String nombreJ2;
 	private int puntuacion;
+	private String idMarcador;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -79,6 +80,7 @@ public class ResponderRetoActivity extends Activity {
 		textoUsuario.setText(nombreUsuario + " ha elegido:");
 		categoria.setText(categoriaUsuario);
 		mostrarResultado = bundle.getBoolean("mostrarResultado");
+		idMarcador = bundle.getString("idMarcador");
 		
 		nombreJugador1 = (TextView)findViewById(R.id.nombreJugador1);
 		puntuacionJugador1 = (TextView)findViewById(R.id.puntuacionJugador1);
@@ -120,51 +122,55 @@ public class ResponderRetoActivity extends Activity {
 			if(device_id == null){
 				device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
 			}
-			boolean esJugador1 = LoginUsuario.esJugador1(device_id, ""+idResultado);
-			if(esJugador1){
-				if(puntosJ1>puntosJ2){
-					textResultado.setText("HAS GANADO!!!");
-					LoginUsuario.actualizarMarcadorJ1(idUsuario, contrincante);
-				}
-				else{
-					textResultado.setText("HAS PERDIDO :(");
-					LoginUsuario.actualizarMarcadorJ2(idUsuario, contrincante);
-				}
+
+			boolean esJugador1 = LoginUsuario.esJugador1(idMarcador, idUsuario);
+			if(puntosJ2>puntosJ1 && esJugador1){
+				textResultado.setText("HAS GANADO!!!");										
+				LoginUsuario.actualizarMarcadorJ1(idMarcador);
+			} else{
+				textResultado.setText("HAS GANADO!!!");
+				LoginUsuario.actualizarMarcadorJ2(idMarcador);					
+			}
+			if(puntosJ1>puntosJ2 && esJugador1)
+				textResultado.setText("HAS PERDIDO :(");
+				LoginUsuario.actualizarMarcadorJ2(idMarcador);
 			}
 			else{
-				if(puntosJ2>puntosJ1){
-					textResultado.setText("HAS GANADO!!!");
-					LoginUsuario.actualizarMarcadorJ2(idUsuario, contrincante);
-				}
-				else{
-					textResultado.setText("HAS PERDIDO :(");
-					LoginUsuario.actualizarMarcadorJ1(idUsuario, contrincante);
-				}
-			}
-				
-		}
+				textResultado.setText("HAS PERDIDO :(");
+				LoginUsuario.actualizarMarcadorJ1(idMarcador);
+			}				
+			
 		botonContinuar.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {
-				LoginUsuario.actualizarResultadoPartida(idUsuario, contrincante, String.valueOf(puntuacion));
+			public void onClick(View v) {				
 				pantallasResponderReto.setDisplayedChild(2);
 				
-				Vector<Integer> marcadores = new Vector<Integer>();
-				marcadores = LoginUsuario.getMarcadorPartida(idUsuario, contrincante);							
+				Vector<String> marcadores = new Vector<String>();
+				marcadores = LoginUsuario.getMarcadorPartida(idMarcador);							
 				
-				marcador1.setText(""+marcadores.get(0));
-				marcador2.setText(""+marcadores.get(1));
-				jugador1.setText(nombreJ1);
-				jugador2.setText(nombreJ2);
+				int marcadorJ1 = Integer.parseInt(marcadores.get(0));
+				int marcadorJ2 = Integer.parseInt(marcadores.get(1));
+				String J1 = marcadores.get(2);
+				String J2 = marcadores.get(3);
 				
+				marcador1.setText(""+marcadorJ1);
+				marcador2.setText(""+marcadorJ2);
+				jugador1.setText(J1);
+				jugador2.setText(J2);
+				
+				LoginUsuario.setRespondida(idMarcador);
 			}
 		});
 		
 		botonOtraCategoria.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
+				i.putExtra("fin", false);
+				i.putExtra("respondiendo", true);
+				i.putExtra("esPrimerReto", false);
+				startActivity(i);
 			}
 		});
 		
@@ -176,7 +182,7 @@ public class ResponderRetoActivity extends Activity {
 				bundle.putInt("numPregunta", 0);
 				bundle.putInt("resultado", 0);
 				bundle.putInt("combo", 0);
-				bundle.putString("jugador1",idUsuario);
+				bundle.putString("jugador1", idUsuario);
 				bundle.putString("jugador2", contrincante);
 				//bundle.putString("marcador", marcador);
 				Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);

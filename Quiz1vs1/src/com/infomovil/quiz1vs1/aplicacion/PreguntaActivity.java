@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -40,6 +41,7 @@ public class PreguntaActivity extends Activity {
 	private String marcador;
 	private String idPreguntas;
 	private boolean esPrimerReto;
+	private boolean respondiendo;
 	public static final long PUNTUACION_TOTAL = 5000;
 	
 	private TextView textoCategoria;
@@ -68,14 +70,17 @@ public class PreguntaActivity extends Activity {
 		};
 	};
 	
+	//@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pregunta);
 		
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+		/*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);*/
         
+		System.out.println("EMPEZANDO A MOSTRAR PREGUNTAS");
+		
 	    bundle = this.getIntent().getExtras();
 		categoria = bundle.getString("categoria");
 		numPregunta = bundle.getInt("numPregunta");
@@ -87,6 +92,7 @@ public class PreguntaActivity extends Activity {
 		marcador = bundle.getString("marcador");
 		idPreguntas = bundle.getString("idPreguntas");
 		esPrimerReto = bundle.getBoolean("esPrimerReto");
+		respondiendo = bundle.getBoolean("respondiendo");
 		p = preguntas.get(numPregunta);
 		System.out.println("RESPONDIENDO PREGUNTA " + numPregunta);
 		Vector<String> respuestas = p.getRespuestas();
@@ -140,6 +146,7 @@ public class PreguntaActivity extends Activity {
 					bundle.putString("marcador", marcador);
 					bundle.putString("idPreguntas", idPreguntas);
 					bundle.putBoolean("esPrimerReto", esPrimerReto);
+					bundle.putBoolean("respondiendo", respondiendo);
 					System.out.println("NUMPREGUNTA: " + numPregunta);
 					if(numPregunta != 5){
 						bundle.putBoolean("final", false);
@@ -197,6 +204,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("marcador", marcador);
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
+				bundle.putBoolean("respondiendo", respondiendo);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
@@ -254,6 +262,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("marcador", marcador);
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
+				bundle.putBoolean("respondiendo", respondiendo);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
@@ -311,6 +320,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("marcador", marcador);
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
+				bundle.putBoolean("respondiendo", respondiendo);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
@@ -368,6 +378,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("marcador", marcador);
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
+				bundle.putBoolean("respondiendo", respondiendo);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
