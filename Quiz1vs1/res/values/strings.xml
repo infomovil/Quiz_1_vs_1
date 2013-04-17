@@ -64,9 +64,9 @@
 	<string name="busqueda_default">Seleccione cómo buscar contrincante</string>
  
     <string-array name="busqueda_array">
-        <item>Por nick</item>
-        <item>Por email</item>
-        <item>Por ciudad</item>
+        <item>Nick</item>
+        <item>Email</item>
+        <item>Ciudad</item>
     </string-array>
     <string name="buscar">Buscar</string>
     

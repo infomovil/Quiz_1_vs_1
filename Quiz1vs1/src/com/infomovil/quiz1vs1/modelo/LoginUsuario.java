@@ -968,8 +968,10 @@ public class LoginUsuario {
 		Vector<Usuario> usuarios = new Vector<Usuario>();
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("campo_busqueda",campo_busqueda));
+		nameValuePairs.add(new BasicNameValuePair("campo_busqueda",campo_busqueda.toLowerCase()));
 		nameValuePairs.add(new BasicNameValuePair("valor_busqueda",valor_busqueda));
+		System.out.println("campo "+campo_busqueda);
+		System.out.println("valor "+valor_busqueda);
 		try{
 		        HttpClient httpclient = new DefaultHttpClient();
 		        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/buscarAdversario.php");
@@ -991,10 +993,12 @@ public class LoginUsuario {
 		        is.close();
 		 
 		        result=sb.toString();
+		        System.out.println("resultado buscar adversario "+result);
 		}catch(Exception e){
 		        Log.e("log_tag", "Error converting result "+e.toString());
 		}
 		try{			
+			
 			if(result!=null){
 		        JSONArray jArray = new JSONArray(result);
 		        for(int i=0;i<jArray.length();i++){
@@ -1003,6 +1007,7 @@ public class LoginUsuario {
 		                String email = json_data.getString("email");
 		                String nick = json_data.getString("nick");
 		                int id = json_data.getInt("id");
+		                u.setId(id);
 		                u.setEmail(email);
 		                u.setNick(nick);
 		                usuarios.add(u);

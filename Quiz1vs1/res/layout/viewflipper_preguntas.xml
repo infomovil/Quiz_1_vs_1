@@ -8,16 +8,6 @@
 
     <include layout="@layout/categorias" />
 
-<!--     <include android:id="@+id/pregunta1" layout="@layout/pregunta" /> -->
-
-<!--     <include android:id="@+id/pregunta2" layout="@layout/pregunta" /> -->
-
-<!--     <include android:id="@+id/pregunta3" layout="@layout/pregunta" /> -->
-
-<!--     <include android:id="@+id/pregunta4" layout="@layout/pregunta" /> -->
-
-<!--     <include android:id="@+id/pregunta5" layout="@layout/pregunta" /> -->
-
     <include layout="@layout/resultado_partida" />
     
     <include layout="@layout/buscar_adversario" />

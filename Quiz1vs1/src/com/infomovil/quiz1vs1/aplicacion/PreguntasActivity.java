@@ -92,6 +92,8 @@ public class PreguntasActivity extends Activity {
 	private boolean fin = false;
 	private boolean esPrimerReto;
 	private boolean respondiendo;
+	
+	private Vector<Usuario> usuarios = new Vector<Usuario>();
 	/*private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			pantallasPreguntas.setDisplayedChild(msg.what);
@@ -253,17 +255,35 @@ public class PreguntasActivity extends Activity {
 			public void onClick(View v) {
 				String campo_busqueda = spinnerBusqueda.getSelectedItem().toString();
 				String valor_busqueda = valorBusqueda.getText().toString();
-				Vector<Usuario> usuarios = LoginUsuario.buscarAdversario(campo_busqueda, valor_busqueda);
+				usuarios = LoginUsuario.buscarAdversario(campo_busqueda, valor_busqueda);
 				Vector<String> adversarios = new Vector<String>();
 				for(int i=0; i<usuarios.size(); i++){
 					adversarios.add(usuarios.get(i).getNick());
 				}
 				
 				listaAdversarios.setAdapter(new ArrayAdapter<String>
-				(getApplicationContext(),R.layout.item_categorias, adversarios));
-				
+				(getApplicationContext(),R.layout.item_categorias, adversarios));	
 			}
 		});
+		
+		listaAdversarios.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				
+				final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+				String device_id = tm.getDeviceId();
+				if(device_id == null){
+					device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
+				}
+				int idAdversario = usuarios.get(position).getId(); 
+				contrincante = String.valueOf(idAdversario);
+				idUsuario = LoginUsuario.getUserId(device_id);				
+				marcador = LoginUsuario.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
+				pantallasPreguntas.setDisplayedChild(1);
+			}
+		});
+		
 		enviarReto.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
