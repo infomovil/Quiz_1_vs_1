@@ -124,22 +124,23 @@ public class ResponderRetoActivity extends Activity {
 			}
 
 			boolean esJugador1 = LoginUsuario.esJugador1(idMarcador, idUsuario);
-			if(puntosJ2>puntosJ1 && esJugador1){
-				textResultado.setText("HAS GANADO!!!");										
-				LoginUsuario.actualizarMarcadorJ1(idMarcador);
+			if(puntosJ2>puntosJ1){
+				textResultado.setText("HAS GANADO!!!");	
+				System.out.println("puntos j2 mayor que puntos j1");
+				if(esJugador1)
+					LoginUsuario.actualizarMarcadorJ1(idMarcador);
+				else
+					LoginUsuario.actualizarMarcadorJ2(idMarcador);
 			} else{
-				textResultado.setText("HAS GANADO!!!");
-				LoginUsuario.actualizarMarcadorJ2(idMarcador);					
-			}
-			if(puntosJ1>puntosJ2 && esJugador1)
 				textResultado.setText("HAS PERDIDO :(");
-				LoginUsuario.actualizarMarcadorJ2(idMarcador);
-			}
-			else{
-				textResultado.setText("HAS PERDIDO :(");
-				LoginUsuario.actualizarMarcadorJ1(idMarcador);
-			}				
-			
+				System.out.println("puntos j1 mayor que puntos j2");
+				if(esJugador1)
+					LoginUsuario.actualizarMarcadorJ2(idMarcador);
+				else
+					LoginUsuario.actualizarMarcadorJ1(idMarcador);
+			}			
+		}
+		
 		botonContinuar.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -170,6 +171,8 @@ public class ResponderRetoActivity extends Activity {
 				i.putExtra("fin", false);
 				i.putExtra("respondiendo", true);
 				i.putExtra("esPrimerReto", false);
+				i.putExtra("jugador1", idUsuario);
+				i.putExtra("jugador2", contrincante);
 				startActivity(i);
 			}
 		});
@@ -184,6 +187,7 @@ public class ResponderRetoActivity extends Activity {
 				bundle.putInt("combo", 0);
 				bundle.putString("jugador1", idUsuario);
 				bundle.putString("jugador2", contrincante);
+				bundle.putBoolean("respondiendo", false);
 				//bundle.putString("marcador", marcador);
 				Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
 				ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntasDeId(idPreguntas);

@@ -115,7 +115,7 @@ public class PreguntasActivity extends Activity {
 		fin = bundle.getBoolean("final");
 		esPrimerReto = bundle.getBoolean("esPrimerReto");
 		respondiendo = bundle.getBoolean("respondiendo");
-		
+		System.out.println("RESPONDIENDO: " + respondiendo);
 		//ELEGIRCONTRINCANTE.XML
         botonAtrasElegirContrincante = (Button) findViewById(R.id.botonAtrasElegirContrincante);
         botonAmigo = (Button) findViewById(R.id.botonAmigo);
@@ -153,7 +153,7 @@ public class PreguntasActivity extends Activity {
 			cargarDatosPuntuacion(bundle);
 			pantallasPreguntas.setDisplayedChild(2);
 		} 
-		if(respondiendo){
+		if(respondiendo && !fin){
 			System.out.println("entro por respondiendo");
 			pantallasPreguntas.setDisplayedChild(1);
 			Vector<String> listaCategorias = LoginUsuario.getCategorias();
@@ -165,29 +165,32 @@ public class PreguntasActivity extends Activity {
 						long arg3) {								
 					categoria = ((TextView) view).getText().toString();
 					if(categoria.equals("Animales") || categoria.equals("Calculo")){						
-						Bundle bundle = new Bundle();
-						bundle.putString("categoria", categoria);
-						bundle.putInt("numPregunta", 0);
-						bundle.putInt("resultado", 0);
-						bundle.putInt("combo", 0);
-						bundle.putString("jugador1",idUsuario);
-						bundle.putString("jugador2", contrincante);
-						bundle.putString("marcador", marcador);
-						bundle.putBoolean("esPrimerReto", esPrimerReto);
-						bundle.putBoolean("respondiendo", true);
+						Bundle bundle2 = new Bundle();
+						bundle2.putString("categoria", categoria);
+						bundle2.putInt("numPregunta", 0);
+						bundle2.putInt("resultado", 0);
+						bundle2.putInt("combo", 0);
+						idUsuario = bundle.getString("jugador1");
+						contrincante = bundle.getString("jugador2");
+						System.out.println("idusuario: " + idUsuario + " contrincante: " + contrincante);
+						bundle2.putString("jugador1",idUsuario);
+						bundle2.putString("jugador2", contrincante);
+						bundle2.putString("marcador", marcador);
+						bundle2.putBoolean("esPrimerReto", esPrimerReto);
+						bundle2.putBoolean("respondiendo", respondiendo);
 						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
 						ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
 						idPreguntas = getIdPreguntas(preguntas);
-						bundle.putString("idPreguntas", idPreguntas);
+						bundle2.putString("idPreguntas", idPreguntas);
 						i.putParcelableArrayListExtra("preguntas", preguntas);
-						i.putExtras(bundle);
+						i.putExtras(bundle2);
 						startActivity(i);
 					}
 					else
 						Toast.makeText(getApplicationContext(), "No hay preguntas para esta categoría todavía", Toast.LENGTH_SHORT).show();
 				}
 			});
-		} 
+		}
 		if (esPrimerReto){
 			System.out.println("entro por primer reto");
 			Vector<String> listaCategorias = LoginUsuario.getCategorias();
@@ -293,9 +296,17 @@ public class PreguntasActivity extends Activity {
 				idPreguntas = bundle.getString("idPreguntas");
 				categoria = bundle.getString("categoria");
 				boolean esPrimerReto = bundle.getBoolean("esPrimerReto");
-				boolean respondiendo = bundle.getBoolean("responidendo");
+				boolean respondiendo = bundle.getBoolean("respondiendo");
 				System.out.println(idUsuario + "\n" + contrincante + "\n" + String.valueOf(puntuacion) + "\n" + esPrimerReto + "\n" + respondiendo);
 				if(esPrimerReto){
+					System.out.println("es el primer reto");
+					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
+					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
+					i.putExtra("respondido", true);
+					startActivity(i);
+				}
+				else if(respondiendo){
+					System.out.println("es el primer reto");
 					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
 					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
 					i.putExtra("respondido", true);

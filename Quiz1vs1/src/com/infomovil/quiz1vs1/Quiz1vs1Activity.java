@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,6 +22,7 @@ import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -373,6 +375,7 @@ public class Quiz1vs1Activity extends Activity {
     
     public boolean conectarAservidor(){
     		boolean conectado = false;
+    		System.out.println("CONECTANDO CON SERVIDOR");
         	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         	String device_id = tm.getDeviceId();
         	if(device_id == null){
@@ -403,6 +406,12 @@ public class Quiz1vs1Activity extends Activity {
 		}
 	};
 		
+	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK)
+			finish();
+		return true;
+	};
+	
 	@Override
 	protected void onStop() {
 		super.onStop();

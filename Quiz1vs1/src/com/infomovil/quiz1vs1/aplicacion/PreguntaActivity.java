@@ -93,6 +93,7 @@ public class PreguntaActivity extends Activity {
 		idPreguntas = bundle.getString("idPreguntas");
 		esPrimerReto = bundle.getBoolean("esPrimerReto");
 		respondiendo = bundle.getBoolean("respondiendo");
+		System.out.println("RESPONDIENDO EN PREGUNTA: " + respondiendo);
 		p = preguntas.get(numPregunta);
 		System.out.println("RESPONDIENDO PREGUNTA " + numPregunta);
 		Vector<String> respuestas = p.getRespuestas();
