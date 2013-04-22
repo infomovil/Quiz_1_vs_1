@@ -3,7 +3,6 @@ package com.infomovil.quiz1vs1.aplicacion;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.os.SystemClock;
-import android.text.Layout;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.infomovil.quiz1vs1.R;
+import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
 
 public class PreguntaActivity extends Activity {
@@ -70,27 +69,28 @@ public class PreguntaActivity extends Activity {
 		};
 	};
 	
-	//@SuppressLint("NewApi")
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pregunta);
 		
-		/*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);*/
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         
 		System.out.println("EMPEZANDO A MOSTRAR PREGUNTAS");
 		
 	    bundle = this.getIntent().getExtras();
 		categoria = bundle.getString("categoria");
+		preguntas = LoginUsuario.getPreguntas(categoria);
 		numPregunta = bundle.getInt("numPregunta");
-		preguntas = getIntent().getParcelableArrayListExtra("preguntas");
+		//preguntas = getIntent().getParcelableArrayListExtra("preguntas");
 		resultado = bundle.getInt("resultado");
 		combo = bundle.getInt("combo");
 		jugador1 = bundle.getString("jugador1");
 		jugador2 = bundle.getString("jugador2");
 		marcador = bundle.getString("marcador");
-		idPreguntas = bundle.getString("idPreguntas");
+		idPreguntas = getIdPreguntas(preguntas);
 		esPrimerReto = bundle.getBoolean("esPrimerReto");
 		respondiendo = bundle.getBoolean("respondiendo");
 		System.out.println("RESPONDIENDO EN PREGUNTA: " + respondiendo);
@@ -431,7 +431,13 @@ public class PreguntaActivity extends Activity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout_combo);
         toast.show();
-		
+	}
+	
+	protected String getIdPreguntas(ArrayList<Pregunta> preguntas) {
+		String IdPreguntas = "";
+		for(int i = 0; i < preguntas.size(); i++)
+			IdPreguntas += preguntas.get(i).getId() + ",";
+		return IdPreguntas.substring(0, IdPreguntas.length()-1);
 	}
 	
 	@Override

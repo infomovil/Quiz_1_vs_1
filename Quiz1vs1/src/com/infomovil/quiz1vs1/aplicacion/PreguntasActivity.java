@@ -179,10 +179,10 @@ public class PreguntasActivity extends Activity {
 						bundle2.putBoolean("esPrimerReto", esPrimerReto);
 						bundle2.putBoolean("respondiendo", respondiendo);
 						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
-						ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
-						idPreguntas = getIdPreguntas(preguntas);
-						bundle2.putString("idPreguntas", idPreguntas);
-						i.putParcelableArrayListExtra("preguntas", preguntas);
+						//ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
+						//idPreguntas = getIdPreguntas(preguntas);
+						//bundle2.putString("idPreguntas", idPreguntas);
+						//i.putParcelableArrayListExtra("preguntas", preguntas);
 						i.putExtras(bundle2);
 						startActivity(i);
 					}
@@ -213,11 +213,11 @@ public class PreguntasActivity extends Activity {
 						bundle.putBoolean("esPrimerReto", esPrimerReto);
 						bundle.putBoolean("respondiendo", false);
 						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
-						ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
-						System.out.println("sigo despues de recoger preguntas");
-						idPreguntas = getIdPreguntas(preguntas);
-						bundle.putString("idPreguntas", idPreguntas);
-						i.putParcelableArrayListExtra("preguntas", preguntas);
+						//ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
+						//System.out.println("sigo despues de recoger preguntas");
+						//idPreguntas = getIdPreguntas(preguntas);
+						//bundle.putString("idPreguntas", idPreguntas);
+						//i.putParcelableArrayListExtra("preguntas", preguntas);
 						i.putExtras(bundle);
 						startActivity(i);
 					}
@@ -249,6 +249,16 @@ public class PreguntasActivity extends Activity {
 			public void onClick(View v) {
 				pantallasPreguntas.setDisplayedChild(3);
 				
+			}
+		});
+		
+		botonAtrasElegirContrincante.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getBaseContext(), Quiz1vs1Activity.class);
+				i.putExtra("atras", true);
+				startActivity(i);
 			}
 		});
 		
@@ -327,13 +337,6 @@ public class PreguntasActivity extends Activity {
 				
 			}
 		});
-	}
-
-	protected String getIdPreguntas(ArrayList<Pregunta> preguntas) {
-		String IdPreguntas = "";
-		for(int i = 0; i < preguntas.size(); i++)
-			IdPreguntas += preguntas.get(i).getId() + ",";
-		return IdPreguntas.substring(0, IdPreguntas.length()-1);
 	}
 
 	private void cargarDatosPuntuacion(Bundle bundle) {

@@ -15,6 +15,8 @@
         <include layout="@layout/principal_layout"/>
         <include layout="@layout/ajustes"/>
         <include layout="@layout/perfil"/>
+        <include layout="@layout/logros"/>
+        <include layout="@layout/ranking"/>
 
     </ViewFlipper>
 

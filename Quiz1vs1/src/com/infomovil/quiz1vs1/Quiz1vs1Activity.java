@@ -1,10 +1,10 @@
 package com.infomovil.quiz1vs1;
 
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.apache.http.conn.HttpHostConnectException;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,7 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.media.ExifInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,9 +22,11 @@ import android.os.StrictMode;
 import android.os.StrictMode.ThreadPolicy;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -33,20 +35,25 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
-
 import com.infomovil.quiz1vs1.aplicacion.PreguntasActivity;
 import com.infomovil.quiz1vs1.aplicacion.ResponderRetoActivity;
+import com.infomovil.quiz1vs1.aplicacion.ServicioNotificaciones;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
+import com.infomovil.quiz1vs1.aplicacion.adapters.LogrosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
 import com.infomovil.quiz1vs1.modelo.LoginUsuario;
+import com.infomovil.quiz1vs1.modelo.Logro;
 import com.infomovil.quiz1vs1.modelo.Preferencias;
 import com.infomovil.quiz1vs1.modelo.Usuario;
 
@@ -79,15 +86,25 @@ public class Quiz1vs1Activity extends Activity {
 	private Button botonPerfil;
 	private Button botonGuardarPerfil;
 	private Button botonGuardarAjustes;
-	private ImageButton botonAjustes;	
-	private ImageButton botonNuevaPartida;
 	private RadioButton radioButtonChicos;
 	private RadioButton radioButtonChicas;
 	private GridView gridview;
 	private ToggleButton notificaciones;
 	private ToggleButton sonido;
 	
-	private Preferencias preferencias; 
+	private Preferencias preferencias;
+	
+	//PRINCIPAL_LAYOUT.XML
+	private ImageButton botonNuevaPartida;
+	private ImageButton botonAjustes;
+	private ImageButton botonLogros;
+	private ImageButton botonRanking;
+	
+	//LOGROS Y RANKING
+	private Button botonAtrasLogros;
+	private Button botonAtrasRanking;
+	private TableLayout tablaPuntuaciones;
+	private GridView gridViewLogros;
 	
 	private Handler manejador = new Handler(){
 		public void handleMessage(Message msg) {
@@ -122,6 +139,13 @@ public class Quiz1vs1Activity extends Activity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null){
+        	boolean atras = bundle.getBoolean("atras");
+        	if(atras)
+        		vf.setDisplayedChild(3);
+        }
+        
         boolean respondido = this.getIntent().getBooleanExtra("respondido", false);
         if(respondido)
         	vf.setDisplayedChild(3);
@@ -142,7 +166,8 @@ public class Quiz1vs1Activity extends Activity {
 		    		pd.dismiss();	    		
 	    		}
     	}).start();
-    		
+    	
+    	
 		listaPartidasEnviadas = (ListView) findViewById(R.id.listPartidasEnviadas);
         listaPartidasPendientes = (ListView) findViewById(R.id.listPartidasPendientes);
         
@@ -166,17 +191,29 @@ public class Quiz1vs1Activity extends Activity {
         botonAtrasAjustes = (Button) findViewById(R.id.botonAtrasAjustes);
         botonAtrasPerfil = (Button) findViewById(R.id.botonAtrasPerfil);
         botonPerfil = (Button) findViewById(R.id.botonPerfil);
-        botonAjustes = (ImageButton) findViewById(R.id.ajustes);
         botonGuardarPerfil = (Button) findViewById(R.id.botonGuardarPerfil);
         botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
-        botonNuevaPartida = (ImageButton) findViewById(R.id.nueva_partida);
         notificaciones = (ToggleButton) findViewById(R.id.toggleButtonNotificaciones);
         sonido = (ToggleButton) findViewById(R.id.toggleButtonSonido);
         
+        //PRINCIPAL_LAYOUT.XML
+        botonAjustes = (ImageButton) findViewById(R.id.ajustes);
+        botonNuevaPartida = (ImageButton) findViewById(R.id.nueva_partida);
+        botonLogros = (ImageButton) findViewById(R.id.logros);
+        botonRanking = (ImageButton) findViewById(R.id.ranking);
+        
+        //LOGROS Y RANKING
+        botonAtrasLogros = (Button) findViewById(R.id.botonAtrasLogros);
+        botonAtrasRanking = (Button) findViewById(R.id.atrasRanking);
+        tablaPuntuaciones = (TableLayout) findViewById(R.id.tablaPuntuaciones);
+        gridViewLogros = (GridView) findViewById(R.id.gridviewLogros);
         
         preferencias = new Preferencias(getApplicationContext());
         loadPreferenceValues();
         preferencias.getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenecChangeListener);
+        
+        Intent service = new Intent(getApplicationContext(), ServicioNotificaciones.class);
+		startService(service);
         
         botonSiguiente.setOnClickListener(new OnClickListener() {
 			
@@ -204,7 +241,6 @@ public class Quiz1vs1Activity extends Activity {
 				else{					
 		        	int imagenID = (Integer) imagenAvatar.getTag();
 		        	String imagen = "" + imagenID;
-		        	//System.out.println("IMAGEN ID: " + imagen);
 		        	LoginUsuario.registroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
 		        			editTextApellido.getText().toString(), editTextNick.getText().toString(), spinnerPaises.getSelectedItem().toString()
 		        			, editTextCiudad.getText().toString(), imagen, device_id);
@@ -215,11 +251,8 @@ public class Quiz1vs1Activity extends Activity {
 
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                long iden = parent.getAdapter().getItemId(position);
-                //System.out.println(iden);
             	imagenAvatar.setBackgroundResource((int)parent.getAdapter().getItemId(position));
                 imagenAvatar.setTag((int)parent.getAdapter().getItemId(position));
-                
             }
         });
         
@@ -267,6 +300,23 @@ public class Quiz1vs1Activity extends Activity {
 			}
 		});
         
+        botonLogros.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cargarLogros();
+				vf.setDisplayedChild(6);
+			}
+		});
+        
+        botonRanking.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				cargarPuntuaciones();
+				vf.setDisplayedChild(7);
+			}
+		});
+        
         botonGuardarAjustes.setOnClickListener(new OnClickListener() {        	
         	@Override
         	public void onClick(View v) {
@@ -275,6 +325,20 @@ public class Quiz1vs1Activity extends Activity {
         });        
         
 		botonAtrasAjustes.setOnClickListener(new OnClickListener() {				
+			@Override
+			public void onClick(View v) {
+				vf.setDisplayedChild(3);			
+			}
+		});
+		
+		botonAtrasLogros.setOnClickListener(new OnClickListener() {				
+			@Override
+			public void onClick(View v) {
+				vf.setDisplayedChild(3);			
+			}
+		});
+		
+		botonAtrasRanking.setOnClickListener(new OnClickListener() {				
 			@Override
 			public void onClick(View v) {
 				vf.setDisplayedChild(3);			
@@ -317,7 +381,7 @@ public class Quiz1vs1Activity extends Activity {
 			usuariospendientes = new Usuario[partidasPendientes.size()];
 			for(int i = 0; i < partidasPendientes.size(); i++){
 				Usuario u = partidasPendientes.get(i);	
-				usuariospendientes[i] = partidasPendientes.get(i);
+				usuariospendientes[i] = u;
 			}
 		}
 		if(partidasRespondidas != null){
@@ -359,14 +423,49 @@ public class Quiz1vs1Activity extends Activity {
 				bundle.putBoolean("mostrarResultado", false);
 				i.putExtras(bundle);
 				startActivity(i);
-        		//Toast.makeText(getApplicationContext(), nombreUsuario + "\n " + categoria + "\n " + idPreguntas, Toast.LENGTH_SHORT).show();
         	}
 		});
     }
 	
-	/**
-	 * Loads the preference values and updates their enable status and summary.
-	 */
+	protected void cargarLogros() {
+		System.out.println("cargando logros");
+		Logro[] listaLogros = null;
+		Vector<Logro> logros = LoginUsuario.getLogros(device_id);
+		System.out.println(logros.size());
+		if(logros != null){
+			listaLogros = new Logro[logros.size()];
+			for(int i = 0; i < logros.size(); i++){
+				Logro l = logros.get(i);	
+				listaLogros[i] = l;
+			}
+		}
+		gridViewLogros.setAdapter(new LogrosAdapter(this, R.layout.item_logro, listaLogros));
+	}
+
+	protected void cargarPuntuaciones() {
+		Vector<Usuario> usuarios = LoginUsuario.getRanking();
+		for(int i=0; i < usuarios.size(); i++){
+			Usuario u = usuarios.get(i);
+			TableRow tr = new TableRow(this);
+			tr.setLayoutParams(new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+			tr.setOrientation(1);
+			TextView usuario = new TextView(this);
+			usuario.setText(u.getNick());
+			usuario.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+			usuario.setTextColor(Color.BLACK);
+			tr.addView(usuario);
+			TextView puntuacion = new TextView(this);
+			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)new LinearLayout.LayoutParams(300,50); 
+		    layoutParams.setMargins(10, 0, 0, 0);
+		    //puntuacion.setLayoutParams(layoutParams);
+			puntuacion.setText("       "+u.getPuntuaciontotal());
+			puntuacion.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+			puntuacion.setTextColor(Color.BLACK);
+			tr.addView(puntuacion);
+			tablaPuntuaciones.addView(tr);
+		}
+	}
+
 	private void loadPreferenceValues() {
 		Preferencias preferencias = new Preferencias(getApplicationContext());
 		notificaciones.setChecked(preferencias.isNotificationEnabled());

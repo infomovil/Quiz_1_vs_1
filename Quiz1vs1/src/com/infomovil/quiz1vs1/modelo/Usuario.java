@@ -9,6 +9,8 @@ public class Usuario {
 	private String ciudad;
 	private String nick;
 	private int id;
+	private String idResultado;
+	private int puntuaciontotal;
 	
 	public int getId() {
 		return id;
@@ -83,5 +85,21 @@ public class Usuario {
 
 	public void setResource_image(int resource_image) {
 		this.resource_image = resource_image;
+	}
+
+	public String getIdResultado() {
+		return idResultado;
+	}
+
+	public void setIdResultado(String idResultado) {
+		this.idResultado = idResultado;
+	}
+
+	public int getPuntuaciontotal() {
+		return puntuaciontotal;
+	}
+
+	public void setPuntuaciontotal(int puntuaciontotal) {
+		this.puntuaciontotal = puntuaciontotal;
 	}
 }

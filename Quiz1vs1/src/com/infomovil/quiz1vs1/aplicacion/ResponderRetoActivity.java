@@ -2,13 +2,10 @@ package com.infomovil.quiz1vs1.aplicacion;
 
 import java.util.ArrayList;
 import java.util.Vector;
-
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings.Secure;
@@ -18,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-
 import com.infomovil.quiz1vs1.R;
 import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
@@ -116,7 +112,7 @@ public class ResponderRetoActivity extends Activity {
 			puntuacionJugador1.setText(""+puntosJ1);
 			puntuacionJugador2.setText(""+puntuacion);
 			
-			int idResultado = (Integer)puntuaciones.get(0);
+			//int idResultado = (Integer)puntuaciones.get(0);
 			final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			String device_id = tm.getDeviceId();
 			if(device_id == null){
