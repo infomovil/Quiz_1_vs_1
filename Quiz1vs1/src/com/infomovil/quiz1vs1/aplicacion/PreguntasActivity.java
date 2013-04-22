@@ -164,30 +164,22 @@ public class PreguntasActivity extends Activity {
 				public void onItemClick(AdapterView<?> arg0, View view, int arg2,
 						long arg3) {								
 					categoria = ((TextView) view).getText().toString();
-					if(categoria.equals("Animales") || categoria.equals("Calculo")){						
-						Bundle bundle2 = new Bundle();
-						bundle2.putString("categoria", categoria);
-						bundle2.putInt("numPregunta", 0);
-						bundle2.putInt("resultado", 0);
-						bundle2.putInt("combo", 0);
-						idUsuario = bundle.getString("jugador1");
-						contrincante = bundle.getString("jugador2");
-						System.out.println("idusuario: " + idUsuario + " contrincante: " + contrincante);
-						bundle2.putString("jugador1",idUsuario);
-						bundle2.putString("jugador2", contrincante);
-						bundle2.putString("marcador", marcador);
-						bundle2.putBoolean("esPrimerReto", esPrimerReto);
-						bundle2.putBoolean("respondiendo", respondiendo);
-						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
-						//ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
-						//idPreguntas = getIdPreguntas(preguntas);
-						//bundle2.putString("idPreguntas", idPreguntas);
-						//i.putParcelableArrayListExtra("preguntas", preguntas);
-						i.putExtras(bundle2);
-						startActivity(i);
-					}
-					else
-						Toast.makeText(getApplicationContext(), "No hay preguntas para esta categoría todavía", Toast.LENGTH_SHORT).show();
+					Bundle bundle2 = new Bundle();
+					bundle2.putString("categoria", categoria);
+					bundle2.putInt("numPregunta", 0);
+					bundle2.putInt("resultado", 0);
+					bundle2.putInt("combo", 0);
+					idUsuario = bundle.getString("jugador1");
+					contrincante = bundle.getString("jugador2");
+					System.out.println("idusuario: " + idUsuario + " contrincante: " + contrincante);
+					bundle2.putString("jugador1",idUsuario);
+					bundle2.putString("jugador2", contrincante);
+					bundle2.putString("marcador", marcador);
+					bundle2.putBoolean("esPrimerReto", esPrimerReto);
+					bundle2.putBoolean("respondiendo", respondiendo);
+					Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
+					i.putExtras(bundle2);
+					startActivity(i);
 				}
 			});
 		}
@@ -201,28 +193,19 @@ public class PreguntasActivity extends Activity {
 				public void onItemClick(AdapterView<?> arg0, View view, int arg2,
 						long arg3) {								
 					categoria = ((TextView) view).getText().toString();
-					if(categoria.equals("Animales") || categoria.equals("Calculo")){						
-						Bundle bundle = new Bundle();
-						bundle.putString("categoria", categoria);
-						bundle.putInt("numPregunta", 0);
-						bundle.putInt("resultado", 0);
-						bundle.putInt("combo", 0);
-						bundle.putString("jugador1",idUsuario);
-						bundle.putString("jugador2", contrincante);
-						bundle.putString("marcador", marcador);
-						bundle.putBoolean("esPrimerReto", esPrimerReto);
-						bundle.putBoolean("respondiendo", false);
-						Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
-						//ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntas(categoria);
-						//System.out.println("sigo despues de recoger preguntas");
-						//idPreguntas = getIdPreguntas(preguntas);
-						//bundle.putString("idPreguntas", idPreguntas);
-						//i.putParcelableArrayListExtra("preguntas", preguntas);
-						i.putExtras(bundle);
-						startActivity(i);
-					}
-					else
-						Toast.makeText(getApplicationContext(), "No hay preguntas para esta categoría todavía", Toast.LENGTH_SHORT).show();
+					Bundle bundle = new Bundle();
+					bundle.putString("categoria", categoria);
+					bundle.putInt("numPregunta", 0);
+					bundle.putInt("resultado", 0);
+					bundle.putInt("combo", 0);
+					bundle.putString("jugador1",idUsuario);
+					bundle.putString("jugador2", contrincante);
+					bundle.putString("marcador", marcador);
+					bundle.putBoolean("esPrimerReto", esPrimerReto);
+					bundle.putBoolean("respondiendo", false);
+					Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
+					i.putExtras(bundle);
+					startActivity(i);
 				}
 			});
 		}

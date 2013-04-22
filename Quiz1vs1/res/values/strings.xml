@@ -69,5 +69,6 @@
         <item>Ciudad</item>
     </string-array>
     <string name="buscar">Buscar</string>
+    <string name="logros">Logros</string>
     
 </resources>
