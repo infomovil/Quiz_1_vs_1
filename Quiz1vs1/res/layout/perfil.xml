@@ -113,9 +113,8 @@
                     android:inputType="textPersonName" />
 
                 <ImageView
-		            android:background="@drawable/avatar2"
 		            android:contentDescription="@string/ajustes"
-		            android:id="@+id/ajustes"
+		            android:id="@+id/imagenAvatarPerfil"
 		            android:layout_width="64dp"
 		            android:layout_height="64dp"
 		            android:layout_gravity="left"/>

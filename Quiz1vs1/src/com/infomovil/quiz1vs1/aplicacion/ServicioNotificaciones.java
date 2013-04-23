@@ -140,7 +140,7 @@ public class ServicioNotificaciones extends Service {
 		Notification n = new Notification(R.drawable.logo_aplicacion, "Quiz Champion", System.currentTimeMillis());
 		n.flags = Notification.FLAG_AUTO_CANCEL;
 		PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this,Quiz1vs1Activity.class),0);
-		n.setLatestEventInfo(this, "Service notification", nick + " te ha enviado una partida", pi);
+		n.setLatestEventInfo(this, "Quiz Champion", nick + " te ha enviado una partida", pi);
 		mgr.notify(1337, n);
 	}
 	

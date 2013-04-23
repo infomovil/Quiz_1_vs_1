@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -92,6 +93,13 @@ public class Quiz1vs1Activity extends Activity {
 	private ToggleButton notificaciones;
 	private ToggleButton sonido;
 	
+	//PERFIL.XML
+	private EditText editTextNombrePerfil;
+	private EditText editTextApellidoPerfil;
+	private Spinner spinnerPaisesPerfil;
+	private EditText editTextCiudadPerfil;
+	private ImageView imagenAvatarPerfil;
+	
 	private Preferencias preferencias;
 	
 	//PRINCIPAL_LAYOUT.XML
@@ -108,9 +116,11 @@ public class Quiz1vs1Activity extends Activity {
 	
 	private Handler manejador = new Handler(){
 		public void handleMessage(Message msg) {
-			if(msg.what != 9)
-				vf.setDisplayedChild(msg.what);
-			else{
+			switch (msg.what) {
+			case 99:
+				Toast.makeText(getApplicationContext(), "Su perfil ha sido modificado", Toast.LENGTH_SHORT).show();
+				break;
+			case 9:
 				AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext()).create();
 				alertDialog.setTitle("Error al iniciar conexion ");
 				alertDialog.setMessage("Lo sentimos, no se ha podido conectar con el servidor.");
@@ -122,6 +132,10 @@ public class Quiz1vs1Activity extends Activity {
 				});
 				alertDialog.setIcon(R.drawable.error);
 				alertDialog.show();
+				break;
+			default:
+				vf.setDisplayedChild(msg.what);
+				break;
 			}
 		};
 	};
@@ -195,6 +209,13 @@ public class Quiz1vs1Activity extends Activity {
         botonGuardarAjustes = (Button) findViewById(R.id.botonGuardarAjustes);
         notificaciones = (ToggleButton) findViewById(R.id.toggleButtonNotificaciones);
         sonido = (ToggleButton) findViewById(R.id.toggleButtonSonido);
+        
+        //PERFIL.XML
+        editTextNombrePerfil = (EditText) findViewById(R.id.editTextNombrePerfil);
+        editTextApellidoPerfil = (EditText) findViewById(R.id.editTextApellidoPerfil);
+        editTextCiudadPerfil = (EditText) findViewById(R.id.editTextCiudadPerfil);
+        spinnerPaisesPerfil = (Spinner) findViewById(R.id.spinnerPaisesPerfil);
+        imagenAvatarPerfil = (ImageView) findViewById(R.id.imagenAvatarPerfil);
         
         //PRINCIPAL_LAYOUT.XML
         botonAjustes = (ImageButton) findViewById(R.id.ajustes);
@@ -281,8 +302,9 @@ public class Quiz1vs1Activity extends Activity {
         botonGuardarPerfil.setOnClickListener(new OnClickListener() {        		
         	@Override
         	public void onClick(View v) {
-        		LoginUsuario.actualizarUsuario(editTextNombre.getText().toString(), editTextApellido.getText().toString(),
-        				spinnerPaises.getSelectedItem().toString(), editTextCiudad.getText().toString());				
+        		LoginUsuario.actualizarUsuario(editTextNombrePerfil.getText().toString(), editTextApellidoPerfil.getText().toString(),
+        				spinnerPaisesPerfil.getSelectedItem().toString(), editTextCiudadPerfil.getText().toString(), device_id);
+        		manejador.sendEmptyMessage(99);
         	}
         });
 
@@ -355,6 +377,7 @@ public class Quiz1vs1Activity extends Activity {
 		botonPerfil.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
+				cargarPerfilUsuario();
 				vf.setDisplayedChild(5);				
 			}
 		});               
@@ -510,6 +533,18 @@ public class Quiz1vs1Activity extends Activity {
 			finish();
 		return true;
 	};
+	
+	protected void cargarPerfilUsuario() {
+		Usuario usuario = LoginUsuario.getPerfilUsuario(device_id);
+		editTextNombrePerfil.setText(usuario.getNombreUsuario());
+		editTextApellidoPerfil.setText(usuario.getApellidoUsuario());
+		editTextCiudadPerfil.setText(usuario.getCiudad());
+		ArrayAdapter myAdap = (ArrayAdapter)spinnerPaises.getAdapter();
+		int posicion = myAdap.getPosition(usuario.getPais());
+		spinnerPaisesPerfil.setSelection(posicion);
+		imagenAvatarPerfil.setBackgroundResource(usuario.getResource_image());
+		
+	}
 	
 	@Override
 	protected void onStop() {

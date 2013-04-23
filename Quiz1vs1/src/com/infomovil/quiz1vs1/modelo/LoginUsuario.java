@@ -143,12 +143,13 @@ public class LoginUsuario {
 		return String.valueOf(id);
 	}
 	
-	public static void actualizarUsuario(String nombre, String apellidos, String pais, String ciudad){
+	public static void actualizarUsuario(String nombre, String apellidos, String pais, String ciudad, String device_id){
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("nombre",nombre));
 		nameValuePairs.add(new BasicNameValuePair("apellidos",apellidos));
 		nameValuePairs.add(new BasicNameValuePair("pais",pais));
 		nameValuePairs.add(new BasicNameValuePair("ciudad",ciudad));
+		nameValuePairs.add(new BasicNameValuePair("device_id", device_id));
 		try{
 	        HttpClient httpclient = new DefaultHttpClient();
 	        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/modificarPerfil.php");
@@ -1049,12 +1050,13 @@ public class LoginUsuario {
 		        JSONArray jArray = new JSONArray(result);
 		        for(int i=0;i<jArray.length();i++){
 		                JSONObject json_data = jArray.getJSONObject(i);
-		                String nombreUsu = json_data.getString("nick");
-		                String avatar = json_data.getString("avatar");
+		                String nick = json_data.getString("nick");
+		                int avatar = json_data.getInt("avatar");
 		                String idResultado = json_data.getString("id");
 		                System.out.println("AVATAR: " + avatar);
-		                Usuario u = new Usuario(nombreUsu, Integer.parseInt(avatar));
+		                Usuario u = new Usuario(nick, avatar);
 		                u.setIdResultado(idResultado);
+		                u.setNick(nick);
 		                pendientes.add(u);
 		        }
 			}
@@ -1173,5 +1175,66 @@ public class LoginUsuario {
 		        Log.e("log_tag", "Error parsing data "+e.toString());
 		}
 		return logros;
+	}
+	
+	public static Usuario getPerfilUsuario(String device_id){
+		Usuario usuario = new Usuario();
+		String result = "";
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("device_id",device_id));
+		try{
+		        HttpClient httpclient = new DefaultHttpClient();
+		        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/recuperarPerfil.php");
+		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		        HttpResponse response = httpclient.execute(httppost);
+		        HttpEntity entity = response.getEntity();
+		        is = entity.getContent();
+		        
+		}catch(Exception e){
+		        Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+		try{
+		        BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+		        StringBuilder sb = new StringBuilder();
+		        String line = null;
+		        while ((line = reader.readLine()) != null) {
+		                sb.append(line + "\n");
+		        }
+		        is.close();
+		        result=sb.toString();
+		}catch(Exception e){
+		        Log.e("log_tag", "Error converting result "+e.toString());
+		}		
+		try{
+			
+			if(result!=null){
+				System.out.println("RESULT GET PERFIL NOTIFICACION: " + result);
+		        JSONArray jArray = new JSONArray(result);
+		        for(int i=0;i<jArray.length();i++){
+		                JSONObject json_data = jArray.getJSONObject(i);
+		                int id = json_data.getInt("id");
+		                String email = json_data.getString("email");
+		                String nombre = json_data.getString("nombre");
+		                String apellidos = json_data.getString("apellidos");
+		                String nick = json_data.getString("nick");
+		                String pais = json_data.getString("pais");
+		                String ciudad = json_data.getString("ciudad");
+		                int avatar = json_data.getInt("avatar");
+		                
+		                usuario.setId(id);
+		                usuario.setEmail(email);
+		                usuario.setNombreUsuario(nombre);
+		                usuario.setApellidoUsuario(apellidos);
+		                usuario.setNick(nick);
+		                usuario.setPais(pais);
+		                usuario.setCiudad(ciudad);
+		                usuario.setResource_image(avatar);
+		                
+		        }
+			}
+		} catch(JSONException e){
+		        Log.e("log_tag", "Error parsing data "+e.toString());
+		}
+		return usuario;
 	}
 }

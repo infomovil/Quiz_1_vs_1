@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="Arial"
         android:gravity="center"
-        android:text="Buscar Judador" 
+        android:text="Buscar Jugador" 
         android:textColor="#0066FF"
         android:textSize="30sp"
         android:layout_marginBottom="30dp"/>
