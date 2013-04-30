@@ -1,9 +1,6 @@
 package com.infomovil.quiz1vs1;
 
-
-import java.util.ArrayList;
 import java.util.Vector;
-
 import org.apache.http.conn.HttpHostConnectException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.os.StrictMode.ThreadPolicy;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.TypedValue;
@@ -36,7 +32,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -48,7 +43,6 @@ import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 import com.infomovil.quiz1vs1.aplicacion.PreguntasActivity;
 import com.infomovil.quiz1vs1.aplicacion.ResponderRetoActivity;
-import com.infomovil.quiz1vs1.aplicacion.ServicioNotificaciones;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.LogrosAdapter;
@@ -56,6 +50,8 @@ import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
 import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Logro;
 import com.infomovil.quiz1vs1.modelo.Preferencias;
+import com.infomovil.quiz1vs1.modelo.PullToRefreshListView;
+import com.infomovil.quiz1vs1.modelo.PullToRefreshListView.OnRefreshListener;
 import com.infomovil.quiz1vs1.modelo.Usuario;
 
 public class Quiz1vs1Activity extends Activity {
@@ -65,7 +61,7 @@ public class Quiz1vs1Activity extends Activity {
 	
 	
 	private static ViewFlipper vf;
-	private ListView listaPartidasPendientes;
+	private PullToRefreshListView listaPartidasPendientes;
 	private ListView listaPartidasEnviadas;
 	
 	//REGISTRO1.XML
@@ -114,14 +110,19 @@ public class Quiz1vs1Activity extends Activity {
 	private TableLayout tablaPuntuaciones;
 	private GridView gridViewLogros;
 	
-	private Handler manejador = new Handler(){
+	private static ProgressDialog pd;
+	
+	private static Context context = null;
+	
+	private static Handler manejador = new Handler(){
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 99:
-				Toast.makeText(getApplicationContext(), "Su perfil ha sido modificado", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Su perfil ha sido modificado", Toast.LENGTH_SHORT).show();
 				break;
 			case 9:
-				AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext()).create();
+				pd.cancel();
+				AlertDialog alertDialog = new AlertDialog.Builder(context).create();
 				alertDialog.setTitle("Error al iniciar conexion ");
 				alertDialog.setMessage("Lo sentimos, no se ha podido conectar con el servidor.");
 				alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Reintentar", new DialogInterface.OnClickListener() {
@@ -147,13 +148,14 @@ public class Quiz1vs1Activity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pantalla_inicio);
+        context = getApplicationContext();
         
         vf = (ViewFlipper) findViewById(R.id.viewFlipper);
         
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         
-        Bundle bundle = this.getIntent().getExtras();
+        final Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
         	boolean atras = bundle.getBoolean("atras");
         	if(atras)
@@ -164,7 +166,7 @@ public class Quiz1vs1Activity extends Activity {
         if(respondido)
         	vf.setDisplayedChild(3);
         	
-        final ProgressDialog pd = ProgressDialog.show(this,"","Cargando...",true, false);
+        pd = ProgressDialog.show(this,"","Cargando...",true, false);
     		new Thread(new Runnable(){
 	    		public void run(){
 		    		try {		    			
@@ -180,10 +182,19 @@ public class Quiz1vs1Activity extends Activity {
 		    		pd.dismiss();	    		
 	    		}
     	}).start();
+//    	int j = 0;
+//    	while(j<3000){
+//    		if(pd.isShowing())
+//    			j++;
+//    	}
+//    	if(j==3000){
+//    		pd.cancel();
+//    		manejador.sendEmptyMessage(9);
+//    	}
     	
     	
 		listaPartidasEnviadas = (ListView) findViewById(R.id.listPartidasEnviadas);
-        listaPartidasPendientes = (ListView) findViewById(R.id.listPartidasPendientes);
+        listaPartidasPendientes = (PullToRefreshListView) findViewById(R.id.listPartidasPendientes);
         
         //REGISTRO1.XML
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
@@ -233,8 +244,8 @@ public class Quiz1vs1Activity extends Activity {
         loadPreferenceValues();
         preferencias.getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenecChangeListener);
         
-        Intent service = new Intent(getApplicationContext(), ServicioNotificaciones.class);
-		startService(service);
+        /*Intent service = new Intent(getApplicationContext(), ServicioNotificaciones.class);
+		startService(service);*/
         
         botonSiguiente.setOnClickListener(new OnClickListener() {
 			
@@ -363,6 +374,7 @@ public class Quiz1vs1Activity extends Activity {
 		botonAtrasRanking.setOnClickListener(new OnClickListener() {				
 			@Override
 			public void onClick(View v) {
+				tablaPuntuaciones.removeViews(0, tablaPuntuaciones.getChildCount());
 				vf.setDisplayedChild(3);			
 			}
 		});
@@ -419,6 +431,31 @@ public class Quiz1vs1Activity extends Activity {
         listaPartidasPendientes.setAdapter(adapter_p);          
         listaPartidasEnviadas.setAdapter(adapter_r);
         
+        listaPartidasPendientes.setOnRefreshListener(new OnRefreshListener() {
+			
+			@Override
+			public void onRefresh() {
+				partidasPendientes = LoginUsuario.getPartidasPendientes(device_id);
+				Usuario usuariospendientes[] = new Usuario[partidasPendientes.size()];
+				for(int i = 0; i < partidasPendientes.size(); i++){
+					Usuario u = partidasPendientes.get(i);	
+					usuariospendientes[i] = u;
+				}
+				
+				listaPartidasPendientes.postDelayed(new Runnable() {
+					
+					@Override
+					public void run() {
+						listaPartidasPendientes.onRefreshComplete();
+					}
+				}, 2000);
+			}
+			 
+		});
+        
+        adapter_p = new UsuariosPendientesAdapter(this, R.layout.item, usuariospendientes);
+		listaPartidasPendientes.setAdapter(adapter_p); 
+        
         listaPartidasPendientes.setOnItemClickListener(new OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> arg0, View view, int arg2,
@@ -436,6 +473,7 @@ public class Quiz1vs1Activity extends Activity {
         		System.out.println("CATEGORIA: " + categoria);
         		System.out.println("IDPREGUNTAS: " + idPreguntas);
         		System.out.println("NOMBREUSUARIO: " + nombreUsuario);
+        		int idPartida = LoginUsuario.tieneResultadoPendiente(idUsuario, contrincante);
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("esPrimerReto", false);
 				bundle.putString("nombreUsuario", nombreUsuario);
@@ -444,12 +482,18 @@ public class Quiz1vs1Activity extends Activity {
 				bundle.putString("jugador1", idUsuario);
 				bundle.putString("jugador2", contrincante);
 				bundle.putBoolean("mostrarResultado", false);
+				if(idPartida!=0){
+        			bundle.putBoolean("tieneResultadoPendiente", true);
+        			bundle.putString("idMarcador", String.valueOf(idPartida));
+        		}
+        		else
+        			bundle.putBoolean("tieneResultadoPendiente", false);
 				i.putExtras(bundle);
 				startActivity(i);
         	}
 		});
     }
-	
+    
 	protected void cargarLogros() {
 		System.out.println("cargando logros");
 		Logro[] listaLogros = null;
@@ -478,10 +522,7 @@ public class Quiz1vs1Activity extends Activity {
 			usuario.setTextColor(Color.BLACK);
 			tr.addView(usuario);
 			TextView puntuacion = new TextView(this);
-			LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)new LinearLayout.LayoutParams(300,50); 
-		    layoutParams.setMargins(10, 0, 0, 0);
-		    //puntuacion.setLayoutParams(layoutParams);
-			puntuacion.setText("       "+u.getPuntuaciontotal());
+			puntuacion.setText("    "+u.getPuntuaciontotal());
 			puntuacion.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
 			puntuacion.setTextColor(Color.BLACK);
 			tr.addView(puntuacion);
@@ -495,21 +536,21 @@ public class Quiz1vs1Activity extends Activity {
 		sonido.setChecked(preferencias.isNotificationEnabled());
 	}
     
-    public boolean conectarAservidor(){
-    		boolean conectado = false;
-    		System.out.println("CONECTANDO CON SERVIDOR");
-        	final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        	String device_id = tm.getDeviceId();
-        	if(device_id == null){
-    			device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
-    		}
-        	try{
-        		conectado = LoginUsuario.estaUsuario(device_id);
-        	}
-        	catch (HttpHostConnectException e) {
-				manejador.sendEmptyMessage(9);
-			}
-        	return conectado;
+    public static boolean conectarAservidor(){
+		boolean conectado = false;
+		System.out.println("CONECTANDO CON SERVIDOR");
+    	final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    	String device_id = tm.getDeviceId();
+    	if(device_id == null){
+			device_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+		}
+    	try{
+    		conectado = LoginUsuario.estaUsuario(device_id);
+    	}
+    	catch (HttpHostConnectException e) {
+			manejador.sendEmptyMessage(9);
+		}
+    	return conectado;
     }
     
     @Override
@@ -534,16 +575,16 @@ public class Quiz1vs1Activity extends Activity {
 		return true;
 	};
 	
+	@SuppressWarnings("unchecked")
 	protected void cargarPerfilUsuario() {
 		Usuario usuario = LoginUsuario.getPerfilUsuario(device_id);
 		editTextNombrePerfil.setText(usuario.getNombreUsuario());
 		editTextApellidoPerfil.setText(usuario.getApellidoUsuario());
 		editTextCiudadPerfil.setText(usuario.getCiudad());
-		ArrayAdapter myAdap = (ArrayAdapter)spinnerPaises.getAdapter();
+		ArrayAdapter<String> myAdap = (ArrayAdapter<String>)spinnerPaises.getAdapter();
 		int posicion = myAdap.getPosition(usuario.getPais());
 		spinnerPaisesPerfil.setSelection(posicion);
 		imagenAvatarPerfil.setBackgroundResource(usuario.getResource_image());
-		
 	}
 	
 	@Override

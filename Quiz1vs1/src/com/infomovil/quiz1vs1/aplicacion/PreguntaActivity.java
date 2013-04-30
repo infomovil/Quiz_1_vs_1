@@ -57,6 +57,7 @@ public class PreguntaActivity extends Activity {
 	private DecimalFormat df;
 	private long millis;
 	private boolean pararCrono;
+	private boolean esPrimeraPregunta;
 	
 	private Thread contadorCrono;
 	
@@ -82,15 +83,30 @@ public class PreguntaActivity extends Activity {
 		
 	    bundle = this.getIntent().getExtras();
 		categoria = bundle.getString("categoria");
-		preguntas = LoginUsuario.getPreguntas(categoria);
+		esPrimeraPregunta = bundle.getBoolean("esPrimeraPregunta");
+		if(esPrimeraPregunta){
+			preguntas = LoginUsuario.getPreguntas(categoria);
+			idPreguntas = getIdPreguntas(preguntas);
+		}
+		else{
+			preguntas = getIntent().getParcelableArrayListExtra("preguntas");
+			idPreguntas = bundle.getString("idPreguntas");
+		}
+			
+		System.out.println(preguntas.size());
+		/*for(int i=0;i<preguntas.size();i++){
+			Pregunta p = preguntas.get(i);
+			System.out.println(p.getId());
+		}*/
 		numPregunta = bundle.getInt("numPregunta");
-		//preguntas = getIntent().getParcelableArrayListExtra("preguntas");
 		resultado = bundle.getInt("resultado");
 		combo = bundle.getInt("combo");
 		jugador1 = bundle.getString("jugador1");
 		jugador2 = bundle.getString("jugador2");
 		marcador = bundle.getString("marcador");
-		idPreguntas = getIdPreguntas(preguntas);
+		System.out.println("MARCADOR EN PREGUNTAS: " + marcador);
+		
+		System.out.println(idPreguntas);
 		esPrimerReto = bundle.getBoolean("esPrimerReto");
 		respondiendo = bundle.getBoolean("respondiendo");
 		System.out.println("RESPONDIENDO EN PREGUNTA: " + respondiendo);
@@ -148,6 +164,7 @@ public class PreguntaActivity extends Activity {
 					bundle.putString("idPreguntas", idPreguntas);
 					bundle.putBoolean("esPrimerReto", esPrimerReto);
 					bundle.putBoolean("respondiendo", respondiendo);
+					bundle.putBoolean("esPrimeraPregunta", false);
 					System.out.println("NUMPREGUNTA: " + numPregunta);
 					if(numPregunta != 5){
 						bundle.putBoolean("final", false);
@@ -206,6 +223,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
@@ -264,6 +282,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
@@ -322,6 +341,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){
@@ -380,6 +400,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
 				if(numPregunta == 5){

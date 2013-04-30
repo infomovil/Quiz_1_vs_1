@@ -174,9 +174,11 @@ public class PreguntasActivity extends Activity {
 					System.out.println("idusuario: " + idUsuario + " contrincante: " + contrincante);
 					bundle2.putString("jugador1",idUsuario);
 					bundle2.putString("jugador2", contrincante);
+					marcador = bundle.getString("marcador");
 					bundle2.putString("marcador", marcador);
 					bundle2.putBoolean("esPrimerReto", esPrimerReto);
 					bundle2.putBoolean("respondiendo", respondiendo);
+					bundle2.putBoolean("esPrimeraPregunta", true);
 					Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
 					i.putExtras(bundle2);
 					startActivity(i);
@@ -193,18 +195,20 @@ public class PreguntasActivity extends Activity {
 				public void onItemClick(AdapterView<?> arg0, View view, int arg2,
 						long arg3) {								
 					categoria = ((TextView) view).getText().toString();
-					Bundle bundle = new Bundle();
-					bundle.putString("categoria", categoria);
-					bundle.putInt("numPregunta", 0);
-					bundle.putInt("resultado", 0);
-					bundle.putInt("combo", 0);
-					bundle.putString("jugador1",idUsuario);
-					bundle.putString("jugador2", contrincante);
-					bundle.putString("marcador", marcador);
-					bundle.putBoolean("esPrimerReto", esPrimerReto);
-					bundle.putBoolean("respondiendo", false);
+					Bundle bundle2 = new Bundle();
+					bundle2.putString("categoria", categoria);
+					bundle2.putInt("numPregunta", 0);
+					bundle2.putInt("resultado", 0);
+					bundle2.putInt("combo", 0);
+					bundle2.putString("jugador1",idUsuario);
+					bundle2.putString("jugador2", contrincante);
+					marcador = bundle.getString("marcador");
+					bundle2.putString("marcador", marcador);
+					bundle2.putBoolean("esPrimerReto", esPrimerReto);
+					bundle2.putBoolean("respondiendo", false);
+					bundle2.putBoolean("esPrimeraPregunta", true);
 					Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
-					i.putExtras(bundle);
+					i.putExtras(bundle2);
 					startActivity(i);
 				}
 			});
@@ -291,6 +295,7 @@ public class PreguntasActivity extends Activity {
 				boolean esPrimerReto = bundle.getBoolean("esPrimerReto");
 				boolean respondiendo = bundle.getBoolean("respondiendo");
 				System.out.println(idUsuario + "\n" + contrincante + "\n" + String.valueOf(puntuacion) + "\n" + esPrimerReto + "\n" + respondiendo);
+				System.out.println("Marcador en preguntasActivity: " + marcador);
 				if(esPrimerReto){
 					System.out.println("es el primer reto");
 					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");

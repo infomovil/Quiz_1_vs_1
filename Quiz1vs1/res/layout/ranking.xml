@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/fondo"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -14,7 +15,7 @@
             android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ranking"
+            android:text="@string/ranking"
             android:gravity="center"
             android:fontFamily="Arial"
             android:textColor="#000000"
@@ -26,6 +27,7 @@
 
     <TableLayout
         android:id="@+id/tablaPuntuaciones"
+        android:background="@layout/borde_grueso"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"

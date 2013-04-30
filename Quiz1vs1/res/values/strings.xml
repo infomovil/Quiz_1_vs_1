@@ -69,5 +69,10 @@
     </string-array>
     <string name="buscar">Buscar</string>
     <string name="logros">Logros</string>
+    <string name="ptr_pull_to_refresh">Tira para refrescar</string>
+    <string name="ptr_release_to_refresh">Suelta para refrescar</string>
+    <string name="ptr_refreshing">Refrescando</string>
+    <string name="ptr_last_updated">Actualizado: %1$s</string>
+    <string name="ranking">Ranking</string>
     
 </resources>

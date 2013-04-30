@@ -15,6 +15,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -172,6 +174,7 @@ public class LoginUsuario {
 		try{
 	        HttpClient httpclient = new DefaultHttpClient();
 	        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/estaUsuario.php");
+	        HttpConnectionParams.setConnectionTimeout(new BasicHttpParams(), 3000);
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	        HttpResponse response = httpclient.execute(httppost);
 	        HttpEntity entity = response.getEntity();
@@ -197,16 +200,16 @@ public class LoginUsuario {
 		}
 		try{
 			System.out.println("RESULT LOGIN: " + result);
-				if(result!=null){
-			        JSONArray jArray = new JSONArray(result);
-			        for(int i=0;i<jArray.length();i++){
-		                JSONObject json_data = jArray.getJSONObject(i);
-		                String deviceID = json_data.getString("device_id");
-		                if(deviceID.equalsIgnoreCase(device_id))
-		                	esta = true;
-			        }
-			        System.out.println("USUARIO EXISTENTE");
-				}
+			if(result!=null){
+		        JSONArray jArray = new JSONArray(result);
+		        for(int i=0;i<jArray.length();i++){
+	                JSONObject json_data = jArray.getJSONObject(i);
+	                String deviceID = json_data.getString("device_id");
+	                if(deviceID.equalsIgnoreCase(device_id))
+	                	esta = true;
+		        }
+		        System.out.println("USUARIO EXISTENTE");
+			}
 		} catch(JSONException e){
 		        Log.e("log_tag", "Error parsing data "+e.toString());
 		}
@@ -954,6 +957,62 @@ public class LoginUsuario {
 		        }
 			}
 		} catch(JSONException e){
+		        Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		
+		return marcadores;
+	}
+	
+	public static Vector<String> getResultadoPendiente(String idMarcador){
+		String result = "";
+		Vector<String> marcadores = new Vector<String>();
+		System.out.println("MARCADOR: " + idMarcador);
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idMarcador",idMarcador));
+		
+		//http post
+		try{
+		        HttpClient httpclient = new DefaultHttpClient();
+		        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/getResultadoPendiente.php");
+		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		        HttpResponse response = httpclient.execute(httppost);
+		        HttpEntity entity = response.getEntity();
+		        is = entity.getContent();
+		        
+		}catch(Exception e){
+		        Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+		//convert response to string
+		try{
+		        BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+		        StringBuilder sb = new StringBuilder();
+		        String line = null;
+		        while ((line = reader.readLine()) != null) {
+		                sb.append(line + "\n");
+		        }
+		        is.close();
+		 
+		        result=sb.toString();
+		}catch(Exception e){
+		        Log.e("log_tag", "Error converting result "+e.toString());
+		}
+		try{
+			if(result!=null){
+				System.out.println("RESULTADO MOSTRAR MARCADOR: " + result);
+		        JSONArray jArray = new JSONArray(result);
+		        for(int i=0;i<jArray.length();i++){
+		                JSONObject json_data = jArray.getJSONObject(i);
+		                int marcadorJ1 = json_data.getInt("puntuacion1");
+		                int marcadorJ2 = json_data.getInt("puntuacion2");
+		                String nickJ1 = json_data.getString("nickj1");
+		                String nickJ2 = json_data.getString("nickj2");
+		                marcadores.add(String.valueOf(marcadorJ1));
+		                marcadores.add(String.valueOf(marcadorJ2));
+		                marcadores.add(nickJ1);
+		                marcadores.add(nickJ2);
+		        }
+			}
+		} catch(JSONException e){
 		        Log.e("log_tag", "Error parsing data "+e.toString());
 		}
 		
@@ -1236,5 +1295,52 @@ public class LoginUsuario {
 		        Log.e("log_tag", "Error parsing data "+e.toString());
 		}
 		return usuario;
+	}
+	
+	public static int tieneResultadoPendiente(String idUsuario, String contrincante) {
+		int partida = 0;
+		String result = "";
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idUsuario1",idUsuario));
+		nameValuePairs.add(new BasicNameValuePair("idUsuario2",contrincante));
+		try{
+	        HttpClient httpclient = new DefaultHttpClient();
+	        HttpPost httppost = new HttpPost("http://" + IP_SERVER + "/quizchampion/getPartidasTotales.php");
+	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	        HttpResponse response = httpclient.execute(httppost);
+	        HttpEntity entity = response.getEntity();
+	        is = entity.getContent();
+		} catch(Exception e){
+		        Log.e("log_tag", "Error in http connection "+e.toString());
+		}
+		try{
+		        BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+		        StringBuilder sb = new StringBuilder();
+		        String line = null;
+		        while ((line = reader.readLine()) != null) {
+		                sb.append(line + "\n");
+		        }
+		        is.close();
+		 
+		        result=sb.toString();
+		}catch(Exception e){
+		        Log.e("log_tag", "Error converting result "+e.toString());
+		}
+		try{
+			System.out.println("RESULT LOGIN: " + result);
+				if(result!=null){
+			        JSONArray jArray = new JSONArray(result);
+			        for(int i=0;i<jArray.length();i++){
+		                JSONObject json_data = jArray.getJSONObject(i);
+		                int total = json_data.getInt("total");
+		                if(total > 0)
+		                	partida = json_data.getInt("id");
+			        }
+			        System.out.println("USUARIO EXISTENTE");
+				}
+		} catch(JSONException e){
+		        Log.e("log_tag", "Error parsing data "+e.toString());
+		}
+		return partida;
 	}
 }

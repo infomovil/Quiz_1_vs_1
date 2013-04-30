@@ -32,6 +32,7 @@ public class ResponderRetoActivity extends Activity {
 	private String idUsuario;
 	private String contrincante;
 	private boolean mostrarResultado;
+	private boolean tieneResultadoPendiente;
 	
 	//MOSTRAR_PUNTUACION_RETO.XML
 	private TextView nombreJugador1;
@@ -77,6 +78,7 @@ public class ResponderRetoActivity extends Activity {
 		categoria.setText(categoriaUsuario);
 		mostrarResultado = bundle.getBoolean("mostrarResultado");
 		idMarcador = bundle.getString("idMarcador");
+		tieneResultadoPendiente = bundle.getBoolean("tieneResultadoPendiente");
 		
 		nombreJugador1 = (TextView)findViewById(R.id.nombreJugador1);
 		puntuacionJugador1 = (TextView)findViewById(R.id.puntuacionJugador1);
@@ -96,6 +98,10 @@ public class ResponderRetoActivity extends Activity {
 		else
 			pantallasResponderReto.setDisplayedChild(1);
 		
+		if(tieneResultadoPendiente){
+			cargarResultadoPendiente();
+			pantallasResponderReto.setDisplayedChild(1);
+		}
 		
 		if(mostrarResultado){
 			Vector<Object> puntuaciones = new Vector<Object>();
@@ -142,20 +148,19 @@ public class ResponderRetoActivity extends Activity {
 			@Override
 			public void onClick(View v) {				
 				pantallasResponderReto.setDisplayedChild(2);
-				
+				if(tieneResultadoPendiente)
+					botonOtraCategoria.setText("Continuar");
 				Vector<String> marcadores = new Vector<String>();
+				System.out.println("IDMARCADOR EN RESPONDER RETO: " + idMarcador);
 				marcadores = LoginUsuario.getMarcadorPartida(idMarcador);							
-				
 				int marcadorJ1 = Integer.parseInt(marcadores.get(0));
 				int marcadorJ2 = Integer.parseInt(marcadores.get(1));
 				String J1 = marcadores.get(2);
 				String J2 = marcadores.get(3);
-				
 				marcador1.setText(""+marcadorJ1);
 				marcador2.setText(""+marcadorJ2);
 				jugador1.setText(J1);
 				jugador2.setText(J2);
-				
 				LoginUsuario.setRespondida(idMarcador);
 			}
 		});
@@ -163,13 +168,21 @@ public class ResponderRetoActivity extends Activity {
 		botonOtraCategoria.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
-				i.putExtra("fin", false);
-				i.putExtra("respondiendo", true);
-				i.putExtra("esPrimerReto", false);
-				i.putExtra("jugador1", idUsuario);
-				i.putExtra("jugador2", contrincante);
-				startActivity(i);
+				if(tieneResultadoPendiente){
+					pantallasResponderReto.setDisplayedChild(0);
+					textoUsuario.setText(nombreUsuario + " ha elegido:");
+					categoria.setText(categoriaUsuario);
+				}
+				else{
+					Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
+					i.putExtra("fin", false);
+					i.putExtra("respondiendo", true);
+					i.putExtra("esPrimerReto", false);
+					i.putExtra("jugador1", idUsuario);
+					i.putExtra("jugador2", contrincante);
+					i.putExtra("marcador", idMarcador);
+					startActivity(i);
+				}
 			}
 		});
 		
@@ -184,7 +197,7 @@ public class ResponderRetoActivity extends Activity {
 				bundle.putString("jugador1", idUsuario);
 				bundle.putString("jugador2", contrincante);
 				bundle.putBoolean("respondiendo", false);
-				//bundle.putString("marcador", marcador);
+				bundle.putString("marcador", idMarcador);
 				Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
 				ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntasDeId(idPreguntas);
 				System.out.println("TAMAÑO: " + preguntas.size());
@@ -194,6 +207,23 @@ public class ResponderRetoActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		
+	}
+
+	private void cargarResultadoPendiente() {		
+		Vector<String> resultadoPartida = LoginUsuario.getResultadoPendiente(idMarcador);
+		int puntosJ1 = Integer.parseInt(resultadoPartida.get(0));
+		int puntosJ2 = Integer.parseInt(resultadoPartida.get(1));
+		String nombreJ1 = resultadoPartida.get(2);
+		String nombreJ2 = resultadoPartida.get(3);
+		nombreJugador1.setText(nombreJ1);
+		nombreJugador2.setText(nombreJ2);
+		puntuacionJugador1.setText(""+puntosJ1);
+		puntuacionJugador2.setText(""+puntosJ2);
+		if(puntosJ2<puntosJ1)
+			textResultado.setText("HAS GANADO!!!");	
+		else
+			textResultado.setText("HAS PERDIDO :(");
 		
 	}
 }

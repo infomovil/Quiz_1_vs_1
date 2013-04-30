@@ -67,12 +67,20 @@
     	android:layout_weight="3"
     	android:textSize="25sp"/>
         
-        <ListView
+        <!-- <ListView
             android:id="@+id/listPartidasPendientes"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1" >
-        </ListView>
+        </ListView> -->
+        <com.infomovil.quiz1vs1.modelo.PullToRefreshListView
+        android:id="@+id/listPartidasPendientes"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:background="@android:color/white"
+        android:cacheColorHint="@android:color/white" />
+        
     </LinearLayout>
     
     <LinearLayout 
