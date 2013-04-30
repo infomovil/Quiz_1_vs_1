@@ -23,16 +23,17 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="Arial"
                 android:gravity="center"
-                android:text="PERFIL"
+                android:text="@string/perfil"
                 android:textColor="#0066FF"
                 android:textSize="30sp" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp">
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -72,7 +73,7 @@
                     android:text="@string/ciudad" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textViewAvatar"
 					android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:gravity="center"
@@ -119,10 +120,8 @@
 		            android:layout_height="64dp"
 		            android:layout_gravity="left"/>
                 
-            </LinearLayout>
-
+        	</LinearLayout>
         </LinearLayout>
-        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >

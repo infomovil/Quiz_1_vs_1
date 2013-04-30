@@ -74,5 +74,6 @@
     <string name="ptr_refreshing">Refrescando</string>
     <string name="ptr_last_updated">Actualizado: %1$s</string>
     <string name="ranking">Ranking</string>
+    <string name="perfil">Perfil</string>
     
 </resources>

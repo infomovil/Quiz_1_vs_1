@@ -299,6 +299,7 @@ public class PreguntasActivity extends Activity {
 				if(esPrimerReto){
 					System.out.println("es el primer reto");
 					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
+					LoginUsuario.setPuntuacionTotal(String.valueOf(puntuacion), idUsuario);
 					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
 					i.putExtra("respondido", true);
 					startActivity(i);
