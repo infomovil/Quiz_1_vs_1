@@ -47,12 +47,14 @@ import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.LogrosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.UsuariosPendientesAdapter;
-import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Logro;
 import com.infomovil.quiz1vs1.modelo.Preferencias;
 import com.infomovil.quiz1vs1.modelo.PullToRefreshListView;
 import com.infomovil.quiz1vs1.modelo.PullToRefreshListView.OnRefreshListener;
 import com.infomovil.quiz1vs1.modelo.Usuario;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDpreguntas;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDresultado;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDusuario;
 
 public class Quiz1vs1Activity extends Activity {
 	
@@ -273,7 +275,7 @@ public class Quiz1vs1Activity extends Activity {
 				else{					
 		        	int imagenID = (Integer) imagenAvatar.getTag();
 		        	String imagen = "" + imagenID;
-		        	LoginUsuario.registroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
+		        	AccesoBDusuario.registroUsuario(editTextEmail.getText().toString(), editTextNombre.getText().toString(),
 		        			editTextApellido.getText().toString(), editTextNick.getText().toString(), spinnerPaises.getSelectedItem().toString()
 		        			, editTextCiudad.getText().toString(), imagen, device_id);
 					vf.showNext();
@@ -313,7 +315,7 @@ public class Quiz1vs1Activity extends Activity {
         botonGuardarPerfil.setOnClickListener(new OnClickListener() {        		
         	@Override
         	public void onClick(View v) {
-        		LoginUsuario.actualizarUsuario(editTextNombrePerfil.getText().toString(), editTextApellidoPerfil.getText().toString(),
+        		AccesoBDusuario.actualizarUsuario(editTextNombrePerfil.getText().toString(), editTextApellidoPerfil.getText().toString(),
         				spinnerPaisesPerfil.getSelectedItem().toString(), editTextCiudadPerfil.getText().toString(), device_id);
         		manejador.sendEmptyMessage(99);
         	}
@@ -409,8 +411,8 @@ public class Quiz1vs1Activity extends Activity {
 		if(device_id == null){
 			device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
 		}
-		partidasPendientes = LoginUsuario.getPartidasPendientes(device_id);
-		partidasRespondidas = LoginUsuario.getPartidasRespondidas(device_id);
+		partidasPendientes = AccesoBDresultado.getPartidasPendientes(device_id);
+		partidasRespondidas = AccesoBDresultado.getPartidasRespondidas(device_id);
 		
 		if(partidasPendientes != null){
 			usuariospendientes = new Usuario[partidasPendientes.size()];
@@ -435,7 +437,7 @@ public class Quiz1vs1Activity extends Activity {
 			
 			@Override
 			public void onRefresh() {
-				partidasPendientes = LoginUsuario.getPartidasPendientes(device_id);
+				partidasPendientes = AccesoBDresultado.getPartidasPendientes(device_id);
 				Usuario usuariospendientes[] = new Usuario[partidasPendientes.size()];
 				for(int i = 0; i < partidasPendientes.size(); i++){
 					Usuario u = partidasPendientes.get(i);	
@@ -463,17 +465,17 @@ public class Quiz1vs1Activity extends Activity {
         		
         		TextView nombre = (TextView) view.findViewById(R.id.nombreUsuario);
         		String nombreUsuario = nombre.getText().toString();
-        		String idUsuario = LoginUsuario.getUserId(device_id);
-        		String contrincante = LoginUsuario.getUserIdNick(nombreUsuario);
-        		String categoria = LoginUsuario.getCategoriaUsuario(idUsuario, contrincante);
-        		String idPreguntas = LoginUsuario.getPreguntasReto(idUsuario, contrincante);
+        		String idUsuario = AccesoBDusuario.getUserId(device_id);
+        		String contrincante = AccesoBDusuario.getUserIdNick(nombreUsuario);
+        		String categoria = AccesoBDpreguntas.getCategoriaUsuario(idUsuario, contrincante);
+        		String idPreguntas = AccesoBDpreguntas.getPreguntasReto(idUsuario, contrincante);
         		Intent i = new Intent(getBaseContext(), ResponderRetoActivity.class);
         		System.out.println("IDUSUARIO: " + idUsuario);
         		System.out.println("CONTRINCANTE: " + contrincante);
         		System.out.println("CATEGORIA: " + categoria);
         		System.out.println("IDPREGUNTAS: " + idPreguntas);
         		System.out.println("NOMBREUSUARIO: " + nombreUsuario);
-        		int idPartida = LoginUsuario.tieneResultadoPendiente(idUsuario, contrincante);
+        		int idPartida = AccesoBDresultado.tieneResultadoPendiente(idUsuario, contrincante);
 				Bundle bundle = new Bundle();
 				bundle.putBoolean("esPrimerReto", false);
 				bundle.putString("nombreUsuario", nombreUsuario);
@@ -497,7 +499,7 @@ public class Quiz1vs1Activity extends Activity {
 	protected void cargarLogros() {
 		System.out.println("cargando logros");
 		Logro[] listaLogros = null;
-		Vector<Logro> logros = LoginUsuario.getLogros(device_id);
+		Vector<Logro> logros = AccesoBDusuario.getLogros(device_id);
 		System.out.println(logros.size());
 		if(logros != null){
 			listaLogros = new Logro[logros.size()];
@@ -510,21 +512,23 @@ public class Quiz1vs1Activity extends Activity {
 	}
 
 	protected void cargarPuntuaciones() {
-		Vector<Usuario> usuarios = LoginUsuario.getRanking();
+		Vector<Usuario> usuarios = AccesoBDusuario.getRanking();
 		for(int i=0; i < usuarios.size(); i++){
 			Usuario u = usuarios.get(i);
 			TableRow tr = new TableRow(this);
-			tr.setLayoutParams(new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+			tr.setLayoutParams(new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
 			tr.setOrientation(1);
 			TextView usuario = new TextView(this);
 			usuario.setText(u.getNick());
-			usuario.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+			usuario.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 			usuario.setTextColor(Color.BLACK);
+			usuario.setBackgroundResource(R.layout.borde);
 			tr.addView(usuario);
 			TextView puntuacion = new TextView(this);
 			puntuacion.setText("    "+u.getPuntuaciontotal());
-			puntuacion.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+			puntuacion.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 			puntuacion.setTextColor(Color.BLACK);
+			puntuacion.setBackgroundResource(R.layout.borde);
 			tr.addView(puntuacion);
 			tablaPuntuaciones.addView(tr);
 		}
@@ -545,7 +549,7 @@ public class Quiz1vs1Activity extends Activity {
 			device_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		}
     	try{
-    		conectado = LoginUsuario.estaUsuario(device_id);
+    		conectado = AccesoBDusuario.estaUsuario(device_id);
     	}
     	catch (HttpHostConnectException e) {
 			manejador.sendEmptyMessage(9);
@@ -577,7 +581,7 @@ public class Quiz1vs1Activity extends Activity {
 	
 	@SuppressWarnings("unchecked")
 	protected void cargarPerfilUsuario() {
-		Usuario usuario = LoginUsuario.getPerfilUsuario(device_id);
+		Usuario usuario = AccesoBDusuario.getPerfilUsuario(device_id);
 		editTextNombrePerfil.setText(usuario.getNombreUsuario());
 		editTextApellidoPerfil.setText(usuario.getApellidoUsuario());
 		editTextCiudadPerfil.setText(usuario.getCiudad());

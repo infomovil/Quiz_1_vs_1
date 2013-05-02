@@ -25,8 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.infomovil.quiz1vs1.R;
-import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDpreguntas;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDusuario;
 
 public class PreguntaActivity extends Activity {
 	
@@ -85,7 +86,7 @@ public class PreguntaActivity extends Activity {
 		categoria = bundle.getString("categoria");
 		esPrimeraPregunta = bundle.getBoolean("esPrimeraPregunta");
 		if(esPrimeraPregunta){
-			preguntas = LoginUsuario.getPreguntas(categoria);
+			preguntas = AccesoBDpreguntas.getPreguntas(categoria);
 			idPreguntas = getIdPreguntas(preguntas);
 		}
 		else{

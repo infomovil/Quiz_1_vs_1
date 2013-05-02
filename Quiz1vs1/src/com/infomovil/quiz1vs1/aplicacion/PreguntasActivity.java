@@ -25,9 +25,12 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.infomovil.quiz1vs1.Quiz1vs1Activity;
 import com.infomovil.quiz1vs1.R;
-import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
 import com.infomovil.quiz1vs1.modelo.Usuario;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDmarcador;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDpreguntas;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDresultado;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDusuario;
 
 public class PreguntasActivity extends Activity {
 
@@ -156,7 +159,7 @@ public class PreguntasActivity extends Activity {
 		if(respondiendo && !fin){
 			System.out.println("entro por respondiendo");
 			pantallasPreguntas.setDisplayedChild(1);
-			Vector<String> listaCategorias = LoginUsuario.getCategorias();
+			Vector<String> listaCategorias = AccesoBDpreguntas.getCategorias();
 			listViewCategorias.setAdapter(new ArrayAdapter<String>(this,
 					R.layout.item_categorias, listaCategorias));
 			listViewCategorias.setOnItemClickListener(new OnItemClickListener() {
@@ -187,7 +190,7 @@ public class PreguntasActivity extends Activity {
 		}
 		if (esPrimerReto){
 			System.out.println("entro por primer reto");
-			Vector<String> listaCategorias = LoginUsuario.getCategorias();
+			Vector<String> listaCategorias = AccesoBDpreguntas.getCategorias();
 			listViewCategorias.setAdapter(new ArrayAdapter<String>(this,
 					R.layout.item_categorias, listaCategorias));
 			listViewCategorias.setOnItemClickListener(new OnItemClickListener() {
@@ -223,9 +226,9 @@ public class PreguntasActivity extends Activity {
 				if(device_id == null){
 					device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
 				}
-				contrincante = LoginUsuario.buscarAleatorio(device_id);
-				idUsuario = LoginUsuario.getUserId(device_id);				
-				marcador = LoginUsuario.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
+				contrincante = AccesoBDusuario.buscarAleatorio(device_id);
+				idUsuario = AccesoBDusuario.getUserId(device_id);				
+				marcador = AccesoBDmarcador.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
 				pantallasPreguntas.setDisplayedChild(1);				
 			}
 		});
@@ -255,7 +258,7 @@ public class PreguntasActivity extends Activity {
 			public void onClick(View v) {
 				String campo_busqueda = spinnerBusqueda.getSelectedItem().toString();
 				String valor_busqueda = valorBusqueda.getText().toString();
-				usuarios = LoginUsuario.buscarAdversario(campo_busqueda, valor_busqueda);
+				usuarios = AccesoBDusuario.buscarAdversario(campo_busqueda, valor_busqueda);
 				Vector<String> adversarios = new Vector<String>();
 				for(int i=0; i<usuarios.size(); i++){
 					adversarios.add(usuarios.get(i).getNick());
@@ -278,8 +281,8 @@ public class PreguntasActivity extends Activity {
 				}
 				int idAdversario = usuarios.get(position).getId(); 
 				contrincante = String.valueOf(idAdversario);
-				idUsuario = LoginUsuario.getUserId(device_id);				
-				marcador = LoginUsuario.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
+				idUsuario = AccesoBDusuario.getUserId(device_id);				
+				marcador = AccesoBDmarcador.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
 				pantallasPreguntas.setDisplayedChild(1);
 			}
 		});
@@ -298,15 +301,15 @@ public class PreguntasActivity extends Activity {
 				System.out.println("Marcador en preguntasActivity: " + marcador);
 				if(esPrimerReto){
 					System.out.println("es el primer reto");
-					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
-					LoginUsuario.setPuntuacionTotal(String.valueOf(puntuacion), idUsuario);
+					AccesoBDresultado.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
+					AccesoBDusuario.setPuntuacionTotal(String.valueOf(puntuacion), idUsuario);
 					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
 					i.putExtra("respondido", true);
 					startActivity(i);
 				}
 				else if(respondiendo){
 					System.out.println("es el primer reto");
-					LoginUsuario.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
+					AccesoBDresultado.registrarResultadoPartida(marcador, idUsuario, String.valueOf(puntuacion), contrincante, "0", idPreguntas, categoria, "0", "0");
 					Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
 					i.putExtra("respondido", true);
 					startActivity(i);
@@ -317,10 +320,10 @@ public class PreguntasActivity extends Activity {
 					i.putExtra("jugador2", contrincante);
 					i.putExtra("puntuacion", puntuacion);
 					i.putExtra("mostrarResultado", true);
-					String idMarcador = LoginUsuario.getIDMarcador(idUsuario, contrincante);
+					String idMarcador = AccesoBDmarcador.getIDMarcador(idUsuario, contrincante);
 					System.out.println("ID MARCADOR: " + idMarcador);
 					i.putExtra("idMarcador", idMarcador);
-					LoginUsuario.actualizarResultadoPartida(idUsuario, contrincante, String.valueOf(puntuacion));
+					AccesoBDresultado.actualizarResultadoPartida(idUsuario, contrincante, String.valueOf(puntuacion));
 					startActivity(i);
 				}
 				

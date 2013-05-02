@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginBottom="30dp" >
 
         <TextView
             android:id="@+id/textView1"
@@ -21,17 +22,30 @@
             android:textColor="#000000"
             android:layout_marginTop="10dp"
             android:textSize="30sp" />
-        
-
     </LinearLayout>
 
     <TableLayout
         android:id="@+id/tablaPuntuaciones"
-        android:background="@layout/borde_grueso"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
         android:paddingRight="30dp">
+        <TableRow 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content">
+            <TextView
+                android:background="@layout/borde"
+                android:layout_width="wrap_content"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/nombre"
+	        	android:textSize="25sp" />
+            <TextView
+                android:background="@layout/borde"
+                android:layout_width="wrap_content"
+	        	android:layout_height="wrap_content"
+	        	android:text="@string/puntuacion"
+	        	android:textSize="25sp" />
+        </TableRow>
       
     </TableLayout>
 
@@ -40,13 +54,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center" >
-
         <Button
             android:id="@+id/atrasRanking"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/atras" />
-
     </LinearLayout>
 
 </LinearLayout>

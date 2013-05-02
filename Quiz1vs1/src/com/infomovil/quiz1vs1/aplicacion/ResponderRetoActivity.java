@@ -16,8 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import com.infomovil.quiz1vs1.R;
-import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDmarcador;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDpreguntas;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDresultado;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDusuario;
 
 public class ResponderRetoActivity extends Activity {
 	
@@ -107,7 +110,7 @@ public class ResponderRetoActivity extends Activity {
 			Vector<Object> puntuaciones = new Vector<Object>();
 			System.out.println("ID1: " + idUsuario);
 			System.out.println("ID2: " + contrincante);
-			puntuaciones = LoginUsuario.getResultadoPartida(idUsuario, contrincante);
+			puntuaciones = AccesoBDresultado.getResultadoPartida(idUsuario, contrincante);
 			int puntosJ1 = (Integer)puntuaciones.get(1);
 			int puntosJ2 = (Integer)puntuaciones.get(2);
 			nombreJ1 = (String)puntuaciones.get(3);
@@ -125,21 +128,21 @@ public class ResponderRetoActivity extends Activity {
 				device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
 			}
 
-			boolean esJugador1 = LoginUsuario.esJugador1(idMarcador, idUsuario);
+			boolean esJugador1 = AccesoBDusuario.esJugador1(idMarcador, idUsuario);
 			if(puntosJ2>puntosJ1){
 				textResultado.setText("HAS GANADO!!!");	
 				System.out.println("puntos j2 mayor que puntos j1");
 				if(esJugador1)
-					LoginUsuario.actualizarMarcadorJ1(idMarcador);
+					AccesoBDmarcador.actualizarMarcadorJ1(idMarcador);
 				else
-					LoginUsuario.actualizarMarcadorJ2(idMarcador);
+					AccesoBDmarcador.actualizarMarcadorJ2(idMarcador);
 			} else{
 				textResultado.setText("HAS PERDIDO :(");
 				System.out.println("puntos j1 mayor que puntos j2");
 				if(esJugador1)
-					LoginUsuario.actualizarMarcadorJ2(idMarcador);
+					AccesoBDmarcador.actualizarMarcadorJ2(idMarcador);
 				else
-					LoginUsuario.actualizarMarcadorJ1(idMarcador);
+					AccesoBDmarcador.actualizarMarcadorJ1(idMarcador);
 			}			
 		}
 		
@@ -152,7 +155,7 @@ public class ResponderRetoActivity extends Activity {
 					botonOtraCategoria.setText("Continuar");
 				Vector<String> marcadores = new Vector<String>();
 				System.out.println("IDMARCADOR EN RESPONDER RETO: " + idMarcador);
-				marcadores = LoginUsuario.getMarcadorPartida(idMarcador);							
+				marcadores = AccesoBDmarcador.getMarcadorPartida(idMarcador);							
 				int marcadorJ1 = Integer.parseInt(marcadores.get(0));
 				int marcadorJ2 = Integer.parseInt(marcadores.get(1));
 				String J1 = marcadores.get(2);
@@ -161,7 +164,7 @@ public class ResponderRetoActivity extends Activity {
 				marcador2.setText(""+marcadorJ2);
 				jugador1.setText(J1);
 				jugador2.setText(J2);
-				LoginUsuario.setRespondida(idMarcador);
+				AccesoBDresultado.setRespondida(idMarcador);
 			}
 		});
 		
@@ -172,8 +175,7 @@ public class ResponderRetoActivity extends Activity {
 					pantallasResponderReto.setDisplayedChild(0);
 					textoUsuario.setText(nombreUsuario + " ha elegido:");
 					categoria.setText(categoriaUsuario);
-				}
-				else{
+				}else{
 					Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
 					i.putExtra("fin", false);
 					i.putExtra("respondiendo", true);
@@ -199,7 +201,7 @@ public class ResponderRetoActivity extends Activity {
 				bundle.putBoolean("respondiendo", false);
 				bundle.putString("marcador", idMarcador);
 				Intent i = new Intent(getApplicationContext(), PreguntaActivity.class);
-				ArrayList<Pregunta> preguntas = LoginUsuario.getPreguntasDeId(idPreguntas);
+				ArrayList<Pregunta> preguntas = AccesoBDpreguntas.getPreguntasDeId(idPreguntas);
 				System.out.println("TAMAÑO: " + preguntas.size());
 				bundle.putString("idPreguntas", idPreguntas);
 				i.putParcelableArrayListExtra("preguntas", preguntas);
@@ -211,7 +213,7 @@ public class ResponderRetoActivity extends Activity {
 	}
 
 	private void cargarResultadoPendiente() {		
-		Vector<String> resultadoPartida = LoginUsuario.getResultadoPendiente(idMarcador);
+		Vector<String> resultadoPartida = AccesoBDresultado.getResultadoPendiente(idMarcador);
 		int puntosJ1 = Integer.parseInt(resultadoPartida.get(0));
 		int puntosJ2 = Integer.parseInt(resultadoPartida.get(1));
 		String nombreJ1 = resultadoPartida.get(2);

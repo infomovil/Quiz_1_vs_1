@@ -6,8 +6,9 @@ import java.util.Vector;
 
 import com.infomovil.quiz1vs1.Quiz1vs1Activity;
 import com.infomovil.quiz1vs1.R;
-import com.infomovil.quiz1vs1.modelo.LoginUsuario;
 import com.infomovil.quiz1vs1.modelo.Usuario;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDresultado;
+import com.infomovil.quiz1vs1.persistencia.AccesoBDusuario;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -119,13 +120,13 @@ public class ServicioNotificaciones extends Service {
     				if(device_id == null){
     					device_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
     				}
-    				partidasPendientes = LoginUsuario.getPartidasEnviadas(device_id);
+    				partidasPendientes = AccesoBDresultado.getPartidasEnviadas(device_id);
     				if(partidasPendientes.size()>0){
     					System.out.println("hay partidas pendientes");
     					for(int i=0; i < partidasPendientes.size(); i++){
     						Usuario u = partidasPendientes.get(i);
     						notifyUp(u.getNick());
-    						LoginUsuario.setEnviada(u.getIdResultado());
+    						AccesoBDresultado.setEnviada(u.getIdResultado());
     					}
     				}
                 }

@@ -71,7 +71,6 @@
             android:layout_height="fill_parent"
             android:layout_weight="1" >
 
-            
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -108,13 +107,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="horizontal">
 
             <Button
                 android:id="@+id/botonOtraCategoria"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:gravity="center"
                 android:text="@string/otracategoria" />
             
         </LinearLayout>
