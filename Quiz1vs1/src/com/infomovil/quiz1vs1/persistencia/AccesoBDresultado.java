@@ -277,9 +277,10 @@ public class AccesoBDresultado {
 		return puntuaciones;
 	}
 	
-	public static void setRespondida(String idMarcador) {
+	public static void setRespondida(String idUsuario1, String idUsuario2) {
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("idMarcador", idMarcador));
+		nameValuePairs.add(new BasicNameValuePair("idUsuario1", idUsuario1));
+		nameValuePairs.add(new BasicNameValuePair("idUsuario2", idUsuario2));
 		try {
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpPost httppost = new HttpPost("http://" + IP_SERVER

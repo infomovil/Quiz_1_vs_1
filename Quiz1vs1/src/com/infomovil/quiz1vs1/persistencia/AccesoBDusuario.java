@@ -1,14 +1,17 @@
 package com.infomovil.quiz1vs1.persistencia;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -16,7 +19,9 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,9 +35,15 @@ import android.util.Log;
 public class AccesoBDusuario {
 
 	// private static final String IP_SERVER = "192.168.2.107";
-	// private static final String IP_SERVER = "192.168.117.1";
+	//private static final String IP_SERVER = "192.168.117.1";
 	private static final String IP_SERVER = "quizchampion.zz.mu";
 
+	private static final long TIMEOUT = 3000;
+	
+	public static final int USUARIO_NUEVO = 0;
+	public static final int EXITO = 1;
+	public static final int CONEXION_FALLIDA = 2;
+	
 	private static InputStream is;
 
 	public static void registroUsuario(String email, String nombre,
@@ -180,29 +191,17 @@ public class AccesoBDusuario {
 
 	}
 
-	public static boolean estaUsuario(String device_id)
-			throws HttpHostConnectException {
-		boolean esta = false;
+	public static int estaUsuario(String device_id) {
+		int estado = USUARIO_NUEVO;
 		String result = "";
+		System.out.println("ENTRANDO...");
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("device_id", device_id));
-		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost("http://" + IP_SERVER
-					+ "/quizchampion/estaUsuario.php");
-			HttpConnectionParams.setConnectionTimeout(new BasicHttpParams(),
-					3000);
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-		} catch (HttpHostConnectException conn) {
-			throw new HttpHostConnectException(conn.getHost(),
-					(ConnectException) conn.getCause());
-		} catch (Exception e) {
-			Log.e("log_tag", "Error in http connection " + e.toString());
-		}
-		try {
+		try{
+			is = conecta("estaUsuario.php" , nameValuePairs);
+			System.out.println("DESPUES DE PRIMERA CONEXION");
+			if(is == null)
+				return CONEXION_FALLIDA;
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, "iso-8859-1"), 8);
 			StringBuilder sb = new StringBuilder();
@@ -211,9 +210,11 @@ public class AccesoBDusuario {
 				sb.append(line + "\n");
 			}
 			is.close();
-
 			result = sb.toString();
-		} catch (Exception e) {
+		} catch (HttpHostConnectException conn) {
+			is = null;
+		} 
+		catch (Exception e) {
 			Log.e("log_tag", "Error converting result " + e.toString());
 		}
 		try {
@@ -224,14 +225,13 @@ public class AccesoBDusuario {
 					JSONObject json_data = jArray.getJSONObject(i);
 					String deviceID = json_data.getString("device_id");
 					if (deviceID.equalsIgnoreCase(device_id))
-						esta = true;
+						estado = EXITO;
 				}
-				System.out.println("USUARIO EXISTENTE");
 			}
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
-		return esta;
+		return estado;
 	}
 
 	public static String buscarAleatorio(String device_id) {
@@ -566,4 +566,28 @@ public class AccesoBDusuario {
 		return usuario;
 	}
 
+	private static InputStream conecta(String direccion, ArrayList<NameValuePair> nameValuePairs) throws HttpHostConnectException{
+		InputStream is = null;
+		try {	
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://" + IP_SERVER
+					+ "/quizchampion/" + direccion);
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response;
+			HttpParams params = httpclient.getParams();
+			params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, Integer.valueOf(5000));
+			params.setParameter(CoreConnectionPNames.SO_TIMEOUT, Integer.valueOf(5000));
+			response = httpclient.execute(httppost);				
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch (HttpHostConnectException conn) {
+			throw new HttpHostConnectException(conn.getHost(),(ConnectException) conn.getCause());
+		}
+		catch (ClientProtocolException e) {e.printStackTrace();} 
+			catch (IOException e) {e.printStackTrace();}
+		System.out.println("TIME: " + Calendar.getInstance().getTimeInMillis());
+		System.out.println("TERMINANDO CONEXION");
+		return is;
+	}
+	
 }

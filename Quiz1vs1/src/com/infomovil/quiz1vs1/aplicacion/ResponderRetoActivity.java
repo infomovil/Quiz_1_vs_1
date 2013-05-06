@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Vector;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -15,6 +18,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import com.infomovil.quiz1vs1.Quiz1vs1Activity;
 import com.infomovil.quiz1vs1.R;
 import com.infomovil.quiz1vs1.modelo.Pregunta;
 import com.infomovil.quiz1vs1.persistencia.AccesoBDmarcador;
@@ -81,6 +86,7 @@ public class ResponderRetoActivity extends Activity {
 		categoria.setText(categoriaUsuario);
 		mostrarResultado = bundle.getBoolean("mostrarResultado");
 		idMarcador = bundle.getString("idMarcador");
+		System.out.println("marcador al empezar: " + idMarcador);
 		tieneResultadoPendiente = bundle.getBoolean("tieneResultadoPendiente");
 		
 		nombreJugador1 = (TextView)findViewById(R.id.nombreJugador1);
@@ -111,6 +117,7 @@ public class ResponderRetoActivity extends Activity {
 			System.out.println("ID1: " + idUsuario);
 			System.out.println("ID2: " + contrincante);
 			puntuaciones = AccesoBDresultado.getResultadoPartida(idUsuario, contrincante);
+			AccesoBDresultado.setRespondida(idUsuario, contrincante);
 			int puntosJ1 = (Integer)puntuaciones.get(1);
 			int puntosJ2 = (Integer)puntuaciones.get(2);
 			nombreJ1 = (String)puntuaciones.get(3);
@@ -153,6 +160,8 @@ public class ResponderRetoActivity extends Activity {
 				pantallasResponderReto.setDisplayedChild(2);
 				if(tieneResultadoPendiente)
 					botonOtraCategoria.setText("Continuar");
+				if(AccesoBDmarcador.partidaFinalizada(idMarcador))
+					botonOtraCategoria.setText("Finalizar");
 				Vector<String> marcadores = new Vector<String>();
 				System.out.println("IDMARCADOR EN RESPONDER RETO: " + idMarcador);
 				marcadores = AccesoBDmarcador.getMarcadorPartida(idMarcador);							
@@ -164,7 +173,7 @@ public class ResponderRetoActivity extends Activity {
 				marcador2.setText(""+marcadorJ2);
 				jugador1.setText(J1);
 				jugador2.setText(J2);
-				AccesoBDresultado.setRespondida(idMarcador);
+				//AccesoBDresultado.setRespondida(idUsuario, contrincante);
 			}
 		});
 		
@@ -176,14 +185,19 @@ public class ResponderRetoActivity extends Activity {
 					textoUsuario.setText(nombreUsuario + " ha elegido:");
 					categoria.setText(categoriaUsuario);
 				}else{
-					Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
-					i.putExtra("fin", false);
-					i.putExtra("respondiendo", true);
-					i.putExtra("esPrimerReto", false);
-					i.putExtra("jugador1", idUsuario);
-					i.putExtra("jugador2", contrincante);
-					i.putExtra("marcador", idMarcador);
-					startActivity(i);
+					if(AccesoBDmarcador.partidaFinalizada(idMarcador)){
+						boolean ganado = AccesoBDmarcador.haGanadoPartida(idMarcador, idUsuario);
+						mostrarFinPartida(ganado,contrincante);
+					} else{
+						Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
+						i.putExtra("fin", false);
+						i.putExtra("respondiendo", true);
+						i.putExtra("esPrimerReto", false);
+						i.putExtra("jugador1", idUsuario);
+						i.putExtra("jugador2", contrincante);
+						i.putExtra("marcador", idMarcador);
+						startActivity(i);
+					}
 				}
 			}
 		});
@@ -210,6 +224,43 @@ public class ResponderRetoActivity extends Activity {
 			}
 		});
 		
+	}
+
+	private void mostrarFinPartida(boolean ganado, final String contrincante) {
+		Builder dialogoFinPartida = new Builder(this);
+		dialogoFinPartida.setTitle("Fin de la partida");
+		if (ganado){
+			dialogoFinPartida.setMessage("ENHORABUENA, HAS GANADO!! \n ¿Deseas iniciar una nueva partida?");
+			dialogoFinPartida.setIcon(R.drawable.correcto);
+		} else {
+			dialogoFinPartida.setMessage("QUE LASTIMA!! HAS PERDIDO... \n ¿Deseas iniciar una nueva partida?");
+			dialogoFinPartida.setIcon(R.drawable.error);
+		}
+		
+		dialogoFinPartida.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
+				i.putExtra("fin", false);
+				i.putExtra("respondiendo", false);
+				i.putExtra("esPrimerReto", true);
+				i.putExtra("jugador1", idUsuario);
+				i.putExtra("jugador2", contrincante);
+				i.putExtra("marcador", idMarcador);
+				startActivity(i);
+			}
+		});
+		dialogoFinPartida.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
+				i.putExtra("atras", true);
+				startActivity(i);
+			}
+		});
+		dialogoFinPartida.show();
 	}
 
 	private void cargarResultadoPendiente() {		

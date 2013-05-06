@@ -246,7 +246,7 @@ public class PreguntasActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(getBaseContext(), Quiz1vs1Activity.class);
+				Intent i = new Intent(getApplicationContext(), Quiz1vs1Activity.class);
 				i.putExtra("atras", true);
 				startActivity(i);
 			}
@@ -283,6 +283,7 @@ public class PreguntasActivity extends Activity {
 				contrincante = String.valueOf(idAdversario);
 				idUsuario = AccesoBDusuario.getUserId(device_id);				
 				marcador = AccesoBDmarcador.registrarPartida(String.valueOf(idUsuario), String.valueOf(contrincante), String.valueOf(0), String.valueOf(0));
+				bundle.putString("marcador", marcador); 
 				pantallasPreguntas.setDisplayedChild(1);
 			}
 		});

@@ -153,8 +153,6 @@ public class AccesoBDmarcador {
 		System.out.println("MARCADOR: " + idMarcador);
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("idMarcador", idMarcador));
-
-		// http post
 		try {
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpPost httppost = new HttpPost("http://" + IP_SERVER
@@ -167,7 +165,6 @@ public class AccesoBDmarcador {
 		} catch (Exception e) {
 			Log.e("log_tag", "Error in http connection " + e.toString());
 		}
-		// convert response to string
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, "iso-8859-1"), 8);
@@ -206,4 +203,110 @@ public class AccesoBDmarcador {
 
 		return marcadores;
 	}
+	
+	public static boolean partidaFinalizada(String idMarcador){
+		boolean finalizada = false;
+		String result ="";
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idMarcador", idMarcador));
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://" + IP_SERVER
+					+ "/quizchampion/getPartidasTotales.php");
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+
+		} catch (Exception e) {
+			Log.e("log_tag", "Error in http connection " + e.toString());
+		}
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "iso-8859-1"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+
+			result = sb.toString();
+		} catch (Exception e) {
+			Log.e("log_tag", "Error converting result " + e.toString());
+		}
+		try {
+			if (result != null) {
+				System.out.println("RESULTADO MOSTRAR PARTIDA FINALIZADA: " + result);
+				JSONArray jArray = new JSONArray(result);
+				for (int i = 0; i < jArray.length(); i++) {
+					JSONObject json_data = jArray.getJSONObject(i);
+					int partidasj1 = json_data.getInt("partidasganadasjugador1");
+					int partidasj2 = json_data.getInt("partidasganadasjugador2");
+					System.out.println(partidasj1 + ":" + partidasj2);
+					if(partidasj1 == 6 || partidasj2 == 6)
+						finalizada = true;
+				}
+			}
+		} catch (JSONException e) {
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		return finalizada;
+	}
+	
+	public static boolean haGanadoPartida(String idMarcador, String idUsuario){
+		boolean ganada = false;
+		String result ="";
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idMarcador", idMarcador));
+		nameValuePairs.add(new BasicNameValuePair("idUsuario", idUsuario));
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://" + IP_SERVER
+					+ "/quizchampion/haGanadoPartida.php");
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch (Exception e) {
+			Log.e("log_tag", "Error in http connection " + e.toString());
+		}
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "iso-8859-1"), 8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+
+			result = sb.toString();
+		} catch (Exception e) {
+			Log.e("log_tag", "Error converting result " + e.toString());
+		}
+		try {
+			if (result != null) {
+				System.out.println("RESULTADO MOSTRAR MARCADOR FINAL: " + result);
+				JSONArray jArray = new JSONArray(result);
+				for (int i = 0; i < jArray.length(); i++) {
+					JSONObject json_data = jArray.getJSONObject(i);
+					int ganadasj1 = json_data.getInt("partidasganadasjugador1");
+					int ganadasj2 = json_data.getInt("partidasganadasjugador1");
+					int idj1 = json_data.getInt("partidasganadasjugador1");
+					int idj2 = json_data.getInt("partidasganadasjugador1");
+					int usuario = Integer.parseInt(idUsuario);
+					System.out.println("usu:" + usuario);
+					if(ganadasj1 == 6)
+						ganada = idj1 == usuario;
+					if(ganadasj2 == 6)
+						ganada = idj2 == usuario;
+				}
+			}
+		} catch (JSONException e) {
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		return ganada;
+	}
+	
 }

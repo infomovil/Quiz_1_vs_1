@@ -1,10 +1,10 @@
 package com.infomovil.quiz1vs1;
 
 import java.util.Vector;
-import org.apache.http.conn.HttpHostConnectException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,6 +43,7 @@ import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 import com.infomovil.quiz1vs1.aplicacion.PreguntasActivity;
 import com.infomovil.quiz1vs1.aplicacion.ResponderRetoActivity;
+import com.infomovil.quiz1vs1.aplicacion.ServicioNotificaciones;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicasAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.ChicosAdapter;
 import com.infomovil.quiz1vs1.aplicacion.adapters.LogrosAdapter;
@@ -114,6 +115,8 @@ public class Quiz1vs1Activity extends Activity {
 	
 	private static ProgressDialog pd;
 	
+	private static Activity actividad;
+	
 	private static Context context = null;
 	
 	private static Handler manejador = new Handler(){
@@ -124,13 +127,34 @@ public class Quiz1vs1Activity extends Activity {
 				break;
 			case 9:
 				pd.cancel();
-				AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+				vf.setDisplayedChild(0);
+				Builder alertDialog = new AlertDialog.Builder(context);
 				alertDialog.setTitle("Error al iniciar conexion ");
 				alertDialog.setMessage("Lo sentimos, no se ha podido conectar con el servidor.");
-				alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Reintentar", new DialogInterface.OnClickListener() {
+				alertDialog.setPositiveButton("Reintentar", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						conectarAservidor();
+						int conexion = conectarAservidor();
+						switch (conexion) {
+						case AccesoBDusuario.EXITO:
+							manejador.sendEmptyMessage(3);
+							break;
+						case AccesoBDusuario.USUARIO_NUEVO:
+							manejador.sendEmptyMessage(1);
+							break;
+						case AccesoBDusuario.CONEXION_FALLIDA:
+							pd.cancel();
+							manejador.sendEmptyMessage(9);
+							break;
+						default:
+							break;
+						}
+					}
+				});
+				alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						actividad.finish();
 					}
 				});
 				alertDialog.setIcon(R.drawable.error);
@@ -150,8 +174,8 @@ public class Quiz1vs1Activity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pantalla_inicio);
-        context = getApplicationContext();
-        
+        context = this;
+        actividad = this;
         vf = (ViewFlipper) findViewById(R.id.viewFlipper);
         
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -171,29 +195,24 @@ public class Quiz1vs1Activity extends Activity {
         pd = ProgressDialog.show(this,"","Cargando...",true, false);
     		new Thread(new Runnable(){
 	    		public void run(){
-		    		try {		    			
-						Thread.sleep(2000);
-						if(conectarAservidor()){
-							manejador.sendEmptyMessage(3);							
-						}
-						else
-							manejador.sendEmptyMessage(1);						
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					int conexion = conectarAservidor();
+					switch (conexion) {
+					case AccesoBDusuario.EXITO:
+						manejador.sendEmptyMessage(3);
+						break;
+					case AccesoBDusuario.USUARIO_NUEVO:
+						manejador.sendEmptyMessage(1);
+						break;
+					case AccesoBDusuario.CONEXION_FALLIDA:
+						pd.cancel();
+						manejador.sendEmptyMessage(9);
+						break;
+					default:
+						break;
 					}
 		    		pd.dismiss();	    		
 	    		}
     	}).start();
-//    	int j = 0;
-//    	while(j<3000){
-//    		if(pd.isShowing())
-//    			j++;
-//    	}
-//    	if(j==3000){
-//    		pd.cancel();
-//    		manejador.sendEmptyMessage(9);
-//    	}
-    	
     	
 		listaPartidasEnviadas = (ListView) findViewById(R.id.listPartidasEnviadas);
         listaPartidasPendientes = (PullToRefreshListView) findViewById(R.id.listPartidasPendientes);
@@ -246,8 +265,8 @@ public class Quiz1vs1Activity extends Activity {
         loadPreferenceValues();
         preferencias.getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenecChangeListener);
         
-        /*Intent service = new Intent(getApplicationContext(), ServicioNotificaciones.class);
-		startService(service);*/
+        Intent service = new Intent(getApplicationContext(), ServicioNotificaciones.class);
+		startService(service);
         
         botonSiguiente.setOnClickListener(new OnClickListener() {
 			
@@ -540,20 +559,15 @@ public class Quiz1vs1Activity extends Activity {
 		sonido.setChecked(preferencias.isNotificationEnabled());
 	}
     
-    public static boolean conectarAservidor(){
-		boolean conectado = false;
+    public static int conectarAservidor(){
+		int conectado;
 		System.out.println("CONECTANDO CON SERVIDOR");
     	final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     	String device_id = tm.getDeviceId();
     	if(device_id == null){
 			device_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		}
-    	try{
-    		conectado = AccesoBDusuario.estaUsuario(device_id);
-    	}
-    	catch (HttpHostConnectException e) {
-			manejador.sendEmptyMessage(9);
-		}
+		conectado = AccesoBDusuario.estaUsuario(device_id);
     	return conectado;
     }
     
@@ -575,7 +589,7 @@ public class Quiz1vs1Activity extends Activity {
 		
 	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK)
-			finish();
+			actividad.finish();
 		return true;
 	};
 	
