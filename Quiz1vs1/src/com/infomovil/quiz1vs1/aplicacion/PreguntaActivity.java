@@ -68,7 +68,7 @@ public class PreguntaActivity extends Activity {
 			Bundle b = msg.getData();
 			boolean correcto = b.getBoolean("correcto");
 			int combo = b.getInt("combo");
-			mostrarCombo(correcto,combo);
+			//mostrarCombo(correcto,combo);
 		};
 	};
 	
@@ -206,7 +206,7 @@ public class PreguntaActivity extends Activity {
 				b.putInt("combo", combo);
 				Message msg = new Message();
 				msg.setData(b);
-				manejador.sendMessage(msg);
+				//manejador.sendMessage(msg);
 				String respuesta = "respuesta" + (numPregunta);
 				String correcta = "esCorrecta" + (numPregunta);
 				String tiempo = "tiempo" + (numPregunta);
@@ -266,7 +266,7 @@ public class PreguntaActivity extends Activity {
 				b.putInt("combo", combo);
 				Message msg = new Message();
 				msg.setData(b);
-				manejador.sendMessage(msg);
+				//manejador.sendMessage(msg);
 				String respuesta = "respuesta" + (numPregunta);
 				String correcta = "esCorrecta" + (numPregunta);
 				String tiempo = "tiempo" + (numPregunta);
@@ -326,7 +326,7 @@ public class PreguntaActivity extends Activity {
 				b.putInt("combo", combo);
 				Message msg = new Message();
 				msg.setData(b);
-				manejador.sendMessage(msg);
+				//manejador.sendMessage(msg);
 				String respuesta = "respuesta" + (numPregunta);
 				String correcta = "esCorrecta" + (numPregunta);
 				String tiempo = "tiempo" + (numPregunta);
@@ -386,7 +386,7 @@ public class PreguntaActivity extends Activity {
 				b.putInt("combo", combo);
 				Message msg = new Message();
 				msg.setData(b);
-				manejador.sendMessage(msg);
+				//manejador.sendMessage(msg);
 				String respuesta = "respuesta" + (numPregunta);
 				String correcta = "esCorrecta" + (numPregunta);
 				String tiempo = "tiempo" + (numPregunta);
@@ -428,7 +428,7 @@ public class PreguntaActivity extends Activity {
 	}
 	
 	
-	private void mostrarCombo(boolean correcto, int combo){
+	/*private void mostrarCombo(boolean correcto, int combo){
 		String texto = "";
 		if(correcto){
 			switch (combo) {
@@ -459,7 +459,7 @@ public class PreguntaActivity extends Activity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout_combo);
         toast.show();
-	}
+	}*/
 	
 	protected String getIdPreguntas(ArrayList<Pregunta> preguntas) {
 		String IdPreguntas = "";

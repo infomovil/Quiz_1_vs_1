@@ -709,6 +709,7 @@ public class Quiz1vs1Activity extends Activity {
 					Secure.ANDROID_ID);
 		}
 		conectado = AccesoBDusuario.estaUsuario(device_id);
+		System.out.println("DEVOLVIENDO CONEXION: " + conectado);
 		return conectado;
 	}
 

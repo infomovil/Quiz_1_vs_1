@@ -228,6 +228,7 @@ public class AccesoBDusuario {
 						estado = EXITO;
 				}
 			}
+			System.out.println("TERMINO LOGIN");
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
