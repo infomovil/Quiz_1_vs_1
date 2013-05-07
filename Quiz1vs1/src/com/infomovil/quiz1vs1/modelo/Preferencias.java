@@ -13,7 +13,7 @@ public class Preferencias {
 	public static final String ENABLE_NOTIFICATIONS = "notificaciones";
 	public static final String ENABLE_SOUND = "sonido";
 	public static final boolean ENABLE_NOTIFICATIONS_DEFAULT = true;
-	public static final boolean ENABLE_SOUND_DEFAULT = true;
+	public static final boolean ENABLE_SOUND_DEFAULT = false;
 	
 	public Preferencias(Context context) {
 		this.context = context;
@@ -28,9 +28,9 @@ public class Preferencias {
 	}
 
 	public void setNotificationEnabled(boolean enabled) {
-		SharedPreferences preferences = getSharedPreferences();
-		preferences.edit().putBoolean(ENABLE_NOTIFICATIONS, enabled);
-		preferences.edit().commit();
+		System.out.println("ESTABLECIENDO NOTIFICACION: " + enabled);
+		getSharedPreferences().edit().putBoolean(ENABLE_NOTIFICATIONS, enabled);
+		getSharedPreferences().edit().commit();
 	}
 	
 	public boolean isSoundEnabled() {
@@ -38,8 +38,8 @@ public class Preferencias {
 	}
 
 	public void setSoundEnabled(boolean enabled) {
-		SharedPreferences preferences = getSharedPreferences();
-		preferences.edit().putBoolean(ENABLE_SOUND, enabled);
-		preferences.edit().commit();
+		System.out.println("ESTABLECIENDO SONIDO: " + enabled);
+		getSharedPreferences().edit().putBoolean(ENABLE_SOUND, enabled);
+		getSharedPreferences().edit().commit();
 	}
 }

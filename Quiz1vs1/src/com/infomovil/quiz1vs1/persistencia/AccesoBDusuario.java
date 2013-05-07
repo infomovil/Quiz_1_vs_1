@@ -453,56 +453,6 @@ public class AccesoBDusuario {
 		return usuarios;
 	}
 
-	public static Vector<Logro> getLogros(String device_id) {
-		Vector<Logro> logros = new Vector<Logro>();
-		String result = "";
-		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		nameValuePairs.add(new BasicNameValuePair("device_id", device_id));
-		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost("http://" + IP_SERVER
-					+ "/quizchampion/getLogros.php");
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-
-		} catch (Exception e) {
-			Log.e("log_tag", "Error in http connection " + e.toString());
-		}
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result = sb.toString();
-		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
-		}
-		try {
-
-			if (result != null) {
-				System.out.println("RESULT GET PARTIDAS NOTIFICACION: "
-						+ result);
-				JSONArray jArray = new JSONArray(result);
-				for (int i = 0; i < jArray.length(); i++) {
-					JSONObject json_data = jArray.getJSONObject(i);
-					String logro = json_data.getString("logro");
-					int imagenLogro = json_data.getInt("imagen_id");
-					Logro l = new Logro(logro, imagenLogro);
-					logros.add(l);
-				}
-			}
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
-		}
-		return logros;
-	}
-
 	public static Usuario getPerfilUsuario(String device_id) {
 		Usuario usuario = new Usuario();
 		String result = "";
@@ -588,6 +538,54 @@ public class AccesoBDusuario {
 		System.out.println("TIME: " + Calendar.getInstance().getTimeInMillis());
 		System.out.println("TERMINANDO CONEXION");
 		return is;
+	}
+	
+	public static void setPartidasGanadas( String idUsuario) {
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idUsuario", idUsuario));
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://" + IP_SERVER
+					+ "/quizchampion/setPartidasGanadas.php");
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch (Exception e) {
+			Log.e("log_tag", "Error in http connection " + e.toString());
+		}
+	}
+	
+	public static void setPartidasJugadas(String idUsuario) {
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idUsuario", idUsuario));
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://" + IP_SERVER
+					+ "/quizchampion/setPartidasJugadas.php");
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch (Exception e) {
+			Log.e("log_tag", "Error in http connection " + e.toString());
+		}
+	}
+	
+	public static void setRetosGanados(String idUsuario) {
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("idUsuario", idUsuario));
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://" + IP_SERVER
+					+ "/quizchampion/setRetosGanados.php");
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			is = entity.getContent();
+		} catch (Exception e) {
+			Log.e("log_tag", "Error in http connection " + e.toString());
+		}
 	}
 	
 }

@@ -42,6 +42,7 @@ public class PreguntaActivity extends Activity {
 	private String idPreguntas;
 	private boolean esPrimerReto;
 	private boolean respondiendo;
+	private boolean nuevaPartida;
 	public static final long PUNTUACION_TOTAL = 5000;
 	
 	private TextView textoCategoria;
@@ -106,10 +107,10 @@ public class PreguntaActivity extends Activity {
 		jugador2 = bundle.getString("jugador2");
 		marcador = bundle.getString("marcador");
 		System.out.println("MARCADOR EN PREGUNTAS: " + marcador);
-		
 		System.out.println(idPreguntas);
 		esPrimerReto = bundle.getBoolean("esPrimerReto");
 		respondiendo = bundle.getBoolean("respondiendo");
+		nuevaPartida = bundle.getBoolean("nuevaPartida", false);
 		System.out.println("RESPONDIENDO EN PREGUNTA: " + respondiendo);
 		p = preguntas.get(numPregunta);
 		System.out.println("RESPONDIENDO PREGUNTA " + numPregunta);
@@ -166,6 +167,7 @@ public class PreguntaActivity extends Activity {
 					bundle.putBoolean("esPrimerReto", esPrimerReto);
 					bundle.putBoolean("respondiendo", respondiendo);
 					bundle.putBoolean("esPrimeraPregunta", false);
+					bundle.putBoolean("nuevaPartida", nuevaPartida);
 					System.out.println("NUMPREGUNTA: " + numPregunta);
 					if(numPregunta != 5){
 						bundle.putBoolean("final", false);
@@ -224,6 +226,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("nuevaPartida", nuevaPartida);
 				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
@@ -283,6 +286,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("nuevaPartida", nuevaPartida);
 				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
@@ -342,6 +346,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("nuevaPartida", nuevaPartida);
 				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);
@@ -401,6 +406,7 @@ public class PreguntaActivity extends Activity {
 				bundle.putString("idPreguntas", idPreguntas);
 				bundle.putBoolean("esPrimerReto", esPrimerReto);
 				bundle.putBoolean("respondiendo", respondiendo);
+				bundle.putBoolean("nuevaPartida", nuevaPartida);
 				bundle.putBoolean("esPrimeraPregunta", false);
 				numPregunta++;
 				System.out.println("NUMPREGUNTA: " + numPregunta);

@@ -61,7 +61,7 @@ public class AccesoBDresultado {
 		}
 		try {
 
-			if (result != null) {
+			if (!result.equals("null\n")) {
 				System.out.println("RESULT GET PARTIDAS PENDIENTES: " + result);
 				JSONArray jArray = new JSONArray(result);
 				for (int i = 0; i < jArray.length(); i++) {
@@ -110,7 +110,7 @@ public class AccesoBDresultado {
 			Log.e("log_tag", "Error converting result " + e.toString());
 		}
 		try {
-			if (result != null) {
+			if (!result.equals("null\n")) {
 				System.out
 						.println("RESULT GET PARTIDAS RESPONDIDAS: " + result);
 				JSONArray jArray = new JSONArray(result);
@@ -433,8 +433,7 @@ public class AccesoBDresultado {
 			Log.e("log_tag", "Error converting result " + e.toString());
 		}
 		try {
-
-			if (result != null) {
+			if (!result.equals("null\n")) {
 				System.out.println("RESULT GET PARTIDAS NOTIFICACION: "
 						+ result);
 				JSONArray jArray = new JSONArray(result);

@@ -46,14 +46,6 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:textColor="#000000"
-                    android:text="@string/sonido" />
-
-                <TextView
                     android:id="@+id/textView3"
 					android:layout_width="150dp"
                     android:layout_height="50dp"
@@ -68,12 +60,6 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-                
-                <ToggleButton
-                    android:id="@+id/toggleButtonSonido"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                 />
 
                 <requestFocus />
                 

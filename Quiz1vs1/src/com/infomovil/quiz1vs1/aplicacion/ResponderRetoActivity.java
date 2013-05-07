@@ -122,7 +122,6 @@ public class ResponderRetoActivity extends Activity {
 			int puntosJ2 = (Integer)puntuaciones.get(2);
 			nombreJ1 = (String)puntuaciones.get(3);
 			nombreJ2 = (String)puntuaciones.get(4);
-			
 			nombreJugador1.setText(nombreJ1);
 			nombreJugador2.setText(nombreJ2);
 			puntuacionJugador1.setText(""+puntosJ1);
@@ -137,7 +136,8 @@ public class ResponderRetoActivity extends Activity {
 
 			boolean esJugador1 = AccesoBDusuario.esJugador1(idMarcador, idUsuario);
 			if(puntosJ2>puntosJ1){
-				textResultado.setText("HAS GANADO!!!");	
+				textResultado.setText("HAS GANADO!!!");
+				AccesoBDusuario.setRetosGanados(idUsuario);
 				System.out.println("puntos j2 mayor que puntos j1");
 				if(esJugador1)
 					AccesoBDmarcador.actualizarMarcadorJ1(idMarcador);
@@ -145,12 +145,13 @@ public class ResponderRetoActivity extends Activity {
 					AccesoBDmarcador.actualizarMarcadorJ2(idMarcador);
 			} else{
 				textResultado.setText("HAS PERDIDO :(");
+				AccesoBDusuario.setRetosGanados(contrincante);
 				System.out.println("puntos j1 mayor que puntos j2");
 				if(esJugador1)
 					AccesoBDmarcador.actualizarMarcadorJ2(idMarcador);
 				else
 					AccesoBDmarcador.actualizarMarcadorJ1(idMarcador);
-			}			
+			}		
 		}
 		
 		botonContinuar.setOnClickListener(new OnClickListener() {
@@ -187,7 +188,7 @@ public class ResponderRetoActivity extends Activity {
 				}else{
 					if(AccesoBDmarcador.partidaFinalizada(idMarcador)){
 						boolean ganado = AccesoBDmarcador.haGanadoPartida(idMarcador, idUsuario);
-						mostrarFinPartida(ganado,contrincante);
+						mostrarFinPartida(ganado);
 					} else{
 						Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
 						i.putExtra("fin", false);
@@ -226,25 +227,28 @@ public class ResponderRetoActivity extends Activity {
 		
 	}
 
-	private void mostrarFinPartida(boolean ganado, final String contrincante) {
+	private void mostrarFinPartida(boolean ganado) {
 		Builder dialogoFinPartida = new Builder(this);
 		dialogoFinPartida.setTitle("Fin de la partida");
 		if (ganado){
 			dialogoFinPartida.setMessage("ENHORABUENA, HAS GANADO!! \n ¿Deseas iniciar una nueva partida?");
+			AccesoBDusuario.setPartidasGanadas(idUsuario);
 			dialogoFinPartida.setIcon(R.drawable.correcto);
 		} else {
 			dialogoFinPartida.setMessage("QUE LASTIMA!! HAS PERDIDO... \n ¿Deseas iniciar una nueva partida?");
+			AccesoBDusuario.setPartidasGanadas(contrincante);
 			dialogoFinPartida.setIcon(R.drawable.error);
 		}
-		
+		AccesoBDusuario.setPartidasJugadas(idUsuario);
+		AccesoBDusuario.setPartidasJugadas(contrincante);
 		dialogoFinPartida.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Intent i = new Intent(getApplicationContext(), PreguntasActivity.class);
 				i.putExtra("fin", false);
-				i.putExtra("respondiendo", false);
-				i.putExtra("esPrimerReto", true);
+				i.putExtra("nuevaPartida", true);
+				i.putExtra("terminada", false);
 				i.putExtra("jugador1", idUsuario);
 				i.putExtra("jugador2", contrincante);
 				i.putExtra("marcador", idMarcador);
